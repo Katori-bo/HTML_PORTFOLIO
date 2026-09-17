@@ -715,8 +715,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Extended scroll runway so the user scrolls more & the transition feels pronounced
       // Starts as boundary enters lower viewport, completes smoothly as user scrolls into workshop
-      const startY = vh * 1.25;
-      const endY = -rect.height * 0.70;
+      const startY = vh * 1.15;
+      const endY = -rect.height * 0.35;
       const rawP = (startY - rect.top) / (startY - endY);
       targetProgress = Math.max(0, Math.min(1, rawP));
     }
@@ -744,8 +744,8 @@ document.addEventListener('DOMContentLoaded', () => {
       pixelWaveCanvas.height = ph * pdpr;
       pctx.scale(pdpr, pdpr);
 
-      // Exact Transform9 block sizing: 14-16 columns desktop, 8 mobile
-      const targetCols = pw < 600 ? 8 : (pw < 1024 ? 12 : 16);
+      // Transform9 block sizing: 18-22 columns desktop, 10 mobile
+      const targetCols = pw < 600 ? 10 : (pw < 1024 ? 16 : 22);
       blockSize = Math.floor(pw / targetCols);
       cols = Math.ceil(pw / blockSize);
 
@@ -808,9 +808,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Base Y of the solid cream deck:
       // Climbs from below canvas (hiddenBaseY) completely up through top (targetBaseY)
-      // Scaled for 7 blocks in depth
-      const targetBaseY = -blockSize * 7.5;
-      const hiddenBaseY = ph + blockSize * 2.5;
+      // Scaled for 7 blocks in depth across the 220px boundary
+      const targetBaseY = -blockSize * 2.0;
+      const hiddenBaseY = ph + blockSize * 7.5;
       const currentDeckY = hiddenBaseY - (hiddenBaseY - targetBaseY) * currentProgress;
 
       // Calculate column deck heights and wave delays
@@ -850,8 +850,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const config = fringeMap[c] || { heightInBlocks: 7, colors: colorPalettes[0] };
         const { colDeckY, colProgress } = colDeckYs[c];
 
-        // Staggered start per column: distributes resolution across progress 0.46 to 0.88
-        const colResolveStart = 0.46 + (((c * 7) % cols) / cols) * 0.38;
+        // Staggered start per column: distributes resolution across progress 0.44 to 0.88
+        const colResolveStart = 0.44 + (((c * 7) % cols) / cols) * 0.38;
         const colResolveDuration = 0.16;
 
         const targetBlocksCount = config.heightInBlocks;
@@ -897,39 +897,6 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(renderPixelWave);
     }
     requestAnimationFrame(renderPixelWave);
-  }
-
-  // =========================================================================
-  // 12b-2. Interactive Mouse-Driven Workshop Reveal & Space Filler Engine
-  // =========================================================================
-  const workshopSection = document.getElementById('workshop');
-  if (workshopSection) {
-    const deckHeader = workshopSection.querySelector('.deck-header-row');
-    const deckGrid = workshopSection.querySelector('.editorial-grid');
-
-    // Strictly triggered by MOUSE MOVEMENT — Never runs autonomously on timers
-    window.addEventListener('mousemove', (e) => {
-      const vh = window.innerHeight;
-      const bRect = pixelBoundary ? pixelBoundary.getBoundingClientRect() : null;
-      const wRect = workshopSection.getBoundingClientRect();
-
-      // Only engage when the transition boundary or top of workshop is in viewport
-      const isInTransitionZone = (bRect && bRect.bottom > 0 && bRect.top < vh) || (wRect.top < vh && wRect.top > -200);
-      if (isInTransitionZone) {
-        // As the mouse moves higher up into the cream void, pull the bottom text up
-        const mouseNormY = Math.max(0, Math.min(1, e.clientY / vh));
-        // Upward pull curve: cursor in upper area pulls text up by up to 210px
-        const upwardPull = Math.pow(1 - mouseNormY, 1.25);
-        const lift = upwardPull * 210;
-
-        if (deckHeader) {
-          deckHeader.style.transform = `translate3d(0, -${lift.toFixed(1)}px, 0)`;
-        }
-        if (deckGrid) {
-          deckGrid.style.transform = `translate3d(0, -${(lift * 0.82).toFixed(1)}px, 0)`;
-        }
-      }
-    }, { passive: true });
   }
 
   // =========================================================================
