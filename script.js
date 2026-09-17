@@ -800,6 +800,163 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================================
+  // 12c. Arcade Page Frosted Glass & Illuminated Grid Squares Engine
+  // =========================================================================
+  const arcadeGridCanvas = document.getElementById('arcadeGridCanvas');
+  if (arcadeGridCanvas) {
+    const actx = arcadeGridCanvas.getContext('2d');
+    let aw = 0;
+    let ah = 0;
+    let adpr = window.devicePixelRatio || 1;
+    let targetX = -1000;
+    let targetY = -1000;
+    let curX = -1000;
+    let curY = -1000;
+    let isMouseInside = false;
+
+    const gridSize = 46; // Crisp square cell size matching arcade theme
+    let cols = 0;
+    let rows = 0;
+    let cellIntensities = [];
+    let cellColors = [];
+
+    const arcadePalette = [
+      '#22c55e', // Neon Arcade Green
+      '#38bdf8', // Cyber Cyan
+      '#f43f5e', // Neon Rose
+      '#facc15', // Pac-Man Gold
+      '#a855f7', // Synthwave Violet
+      '#ec4899'  // Neon Pink
+    ];
+
+    function resizeArcadeGrid() {
+      adpr = window.devicePixelRatio || 1;
+      aw = window.innerWidth;
+      ah = window.innerHeight;
+      arcadeGridCanvas.width = aw * adpr;
+      arcadeGridCanvas.height = ah * adpr;
+      actx.scale(adpr, adpr);
+
+      cols = Math.ceil(aw / gridSize);
+      rows = Math.ceil(ah / gridSize);
+
+      cellIntensities = [];
+      cellColors = [];
+      for (let c = 0; c < cols; c++) {
+        cellIntensities[c] = [];
+        cellColors[c] = [];
+        for (let r = 0; r < rows; r++) {
+          cellIntensities[c][r] = 0;
+          const hash = (c * 43 + r * 67 + (c ^ r) * 19) % arcadePalette.length;
+          cellColors[c][r] = arcadePalette[hash];
+        }
+      }
+    }
+
+    window.addEventListener('resize', resizeArcadeGrid);
+    resizeArcadeGrid();
+
+    window.addEventListener('mousemove', (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+      if (!isMouseInside) {
+        curX = targetX;
+        curY = targetY;
+        isMouseInside = true;
+      }
+    }, { passive: true });
+
+    window.addEventListener('mouseleave', () => {
+      isMouseInside = false;
+    });
+
+    let arcadeTime = 0;
+    function renderArcadeGrid() {
+      arcadeTime += 0.02;
+
+      if (isMouseInside) {
+        curX += (targetX - curX) * 0.09;
+        curY += (targetY - curY) * 0.09;
+      } else {
+        // Ambient retro cruise path when idle
+        curX = aw * 0.50 + Math.sin(arcadeTime * 0.55) * (aw * 0.32);
+        curY = ah * 0.46 + Math.cos(arcadeTime * 0.40) * (ah * 0.25);
+      }
+
+      actx.clearRect(0, 0, aw, ah);
+
+      // 1. Base grid lines
+      actx.strokeStyle = 'rgba(34, 197, 94, 0.04)';
+      actx.lineWidth = 1;
+      actx.beginPath();
+      for (let c = 0; c <= cols; c++) {
+        const x = c * gridSize;
+        actx.moveTo(x, 0);
+        actx.lineTo(x, ah);
+      }
+      for (let r = 0; r <= rows; r++) {
+        const y = r * gridSize;
+        actx.moveTo(0, y);
+        actx.lineTo(aw, y);
+      }
+      actx.stroke();
+
+      // 2. Light up squares around moving light source
+      const radius = 290;
+      for (let c = 0; c < cols; c++) {
+        for (let r = 0; r < rows; r++) {
+          const sqCenterX = c * gridSize + gridSize / 2;
+          const sqCenterY = r * gridSize + gridSize / 2;
+          const dist = Math.hypot(sqCenterX - curX, sqCenterY - curY);
+
+          let targetInt = 0;
+          if (dist < radius) {
+            targetInt = Math.pow(Math.max(0, 1 - dist / radius), 1.5);
+          }
+
+          if (targetInt > cellIntensities[c][r]) {
+            cellIntensities[c][r] = targetInt;
+          } else {
+            cellIntensities[c][r] *= 0.93; // Smooth decaying trail of lit squares
+          }
+
+          const currentInt = cellIntensities[c][r];
+          if (currentInt > 0.015) {
+            const colorHex = cellColors[c][r];
+            const x = c * gridSize;
+            const y = r * gridSize;
+
+            actx.fillStyle = colorHex;
+            actx.globalAlpha = Math.min(0.85, currentInt * 0.95);
+            actx.fillRect(x + 1.5, y + 1.5, gridSize - 3, gridSize - 3);
+
+            // Glowing neon borders for active square tiles
+            actx.strokeStyle = '#ffffff';
+            actx.globalAlpha = Math.min(0.65, currentInt * 0.75);
+            actx.lineWidth = 1.2;
+            actx.strokeRect(x + 1, y + 1, gridSize - 2, gridSize - 2);
+          }
+        }
+      }
+      actx.globalAlpha = 1.0;
+
+      // 3. Central floating energy orb behind the frosted glass
+      const coreGrad = actx.createRadialGradient(curX, curY, 0, curX, curY, radius * 0.7);
+      coreGrad.addColorStop(0.0, 'rgba(34, 197, 94, 0.40)');
+      coreGrad.addColorStop(0.3, 'rgba(56, 189, 248, 0.28)');
+      coreGrad.addColorStop(0.6, 'rgba(236, 72, 153, 0.18)');
+      coreGrad.addColorStop(1.0, 'rgba(6, 8, 14, 0)');
+      actx.fillStyle = coreGrad;
+      actx.beginPath();
+      actx.arc(curX, curY, radius * 0.7, 0, Math.PI * 2);
+      actx.fill();
+
+      requestAnimationFrame(renderArcadeGrid);
+    }
+    requestAnimationFrame(renderArcadeGrid);
+  }
+
+  // =========================================================================
   // 13. Interactive Terminal / 3D Tilt Card Engine
   // =========================================================================
   const tiltCard = document.querySelector('.terminal-card');

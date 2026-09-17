@@ -26,6 +26,30 @@
       min-height: 100vh;
     }
 
+    /* Layer 1: Animated Arcade Grid Canvas */
+    .arcade-grid-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Layer 2: Frosted Translucent Glass Overlay */
+    .arcade-frosted-glass-overlay {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(28px) saturate(170%);
+      -webkit-backdrop-filter: blur(28px) saturate(170%);
+      background: radial-gradient(circle at 50% 30%, rgba(6, 8, 14, 0.40) 0%, rgba(6, 8, 14, 0.76) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
     /* Synthwave 3D Perspective Floor */
     .retro-grid-floor {
       position: fixed;
@@ -42,7 +66,7 @@
       mask-image: linear-gradient(to top, rgba(0,0,0,1) 20%, transparent 100%);
       -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 20%, transparent 100%);
       pointer-events: none;
-      z-index: 0;
+      z-index: 2;
       animation: retro-grid-scroll 2.5s linear infinite;
     }
 
@@ -55,7 +79,7 @@
     .floating-pixel-sprite {
       position: fixed;
       pointer-events: none;
-      z-index: 1;
+      z-index: 4;
       opacity: 0.75;
       animation: float-retro 5s ease-in-out infinite;
     }
@@ -115,7 +139,7 @@
       gap: 32px;
       margin: 32px auto 60px;
       position: relative;
-      z-index: 5;
+      z-index: 10;
     }
 
     /* Side Pillars */
@@ -378,7 +402,13 @@
 </head>
 <body class="theme-arcade">
 
-  <!-- Retro Synthwave 3D Perspective Grid Floor -->
+  <!-- Layer 1: Animated Arcade Grid Canvas (Squares light up on cursor movement) -->
+  <canvas id="arcadeGridCanvas" class="arcade-grid-canvas" aria-hidden="true"></canvas>
+
+  <!-- Layer 2: Frosted Translucent Glass Overlay (Diffuses light beneath) -->
+  <div class="arcade-frosted-glass-overlay" aria-hidden="true"></div>
+
+  <!-- Layer 3: Retro Synthwave 3D Perspective Grid Floor (On top of frosted glass) -->
   <div class="retro-grid-floor" aria-hidden="true"></div>
 
   <!-- Vibrant Floating Pixel Art Sprites in Background -->
@@ -412,6 +442,24 @@
     <svg width="36" height="32" viewBox="0 0 10 9" fill="#ec4899" style="filter: drop-shadow(0 0 12px rgba(236, 72, 153, 0.65));">
       <path d="M1 0h3v1H1zM6 0h3v1H6zM0 1h5v1H0zM5 1h5v1H5zM0 2h10v3H0zM1 5h8v1H1zM2 6h6v1H2zM3 7h4v1H3zM4 8h2v1H4z"/>
       <rect x="2" y="2" width="2" height="2" fill="#fbcfe8"/>
+    </svg>
+  </div>
+
+  <!-- Floating Pac-Man Sprite On Top -->
+  <div class="floating-pixel-sprite" style="top: 310px; left: 3.5%; animation-delay: 0.8s;" aria-hidden="true">
+    <svg width="44" height="44" viewBox="0 0 16 16" fill="#facc15" style="filter: drop-shadow(0 0 14px rgba(250, 204, 21, 0.85));">
+      <path d="M5 0h6v1H5zM3 1h10v1H3zM2 2h12v1H2zM1 3h14v2H1zM0 5h12v1H0zM0 6h9v1H0zM0 7h7v2H0zM0 9h9v1H0zM0 10h12v1H0zM1 11h14v2H1zM2 13h12v1H2zM3 14h10v1H3zM5 15h6v1H5z"/>
+      <circle cx="14" cy="8" r="1.5" fill="#faf6ee" style="filter: drop-shadow(0 0 6px #fff);"/>
+    </svg>
+  </div>
+
+  <!-- Floating Retro Cherry Sprite On Top -->
+  <div class="floating-pixel-sprite" style="top: 330px; right: 3.5%; animation-delay: 2.2s;" aria-hidden="true">
+    <svg width="40" height="40" viewBox="0 0 16 16" fill="#f43f5e" style="filter: drop-shadow(0 0 14px rgba(244, 63, 94, 0.8));">
+      <path d="M7 1h2v3H7zM9 2h3v1H9zM12 3h2v2h-2zM4 9h4v4H4zM10 9h4v4h-4zM5 8h2v1H5zM11 8h2v1h-2zM5 13h2v1H5zM11 13h2v1h-2z"/>
+      <rect x="5" y="10" width="1" height="1" fill="#fff"/>
+      <rect x="11" y="10" width="1" height="1" fill="#fff"/>
+      <path d="M8 1h1v1H8z" fill="#22c55e"/>
     </svg>
   </div>
 
