@@ -468,13 +468,13 @@ document.addEventListener('DOMContentLoaded', () => {
   quickSpecBackdrop?.addEventListener('click', () => toggleQuickSpec(false));
 
   // =========================================================================
-  // 12a. Hero Translucent Glass Color Pop Spotlight Engine (Transform9 inspired)
+  // 12a. Hero Translucent Frosted Glass & Illuminated Grid Squares Engine
   // =========================================================================
   const heroSection = document.getElementById('hero');
-  const heroGlassCanvas = document.getElementById('heroGlassCanvas');
+  const heroGridCanvas = document.getElementById('heroGridCanvas');
 
-  if (heroSection && heroGlassCanvas) {
-    const hctx = heroGlassCanvas.getContext('2d');
+  if (heroSection && heroGridCanvas) {
+    const hctx = heroGridCanvas.getContext('2d');
     let hw = 0;
     let hh = 0;
     let hdpr = window.devicePixelRatio || 1;
@@ -484,17 +484,47 @@ document.addEventListener('DOMContentLoaded', () => {
     let curY = -1000;
     let isMouseInside = false;
 
-    function resizeHeroGlass() {
+    const gridSize = 50; // Crisp square cell size matching the hero aesthetic
+    let cols = 0;
+    let rows = 0;
+    let cellIntensities = [];
+    let cellColors = [];
+
+    const vibrantPalette = [
+      '#4ade80', // Transform9 Lime
+      '#38bdf8', // Cyan
+      '#2563eb', // Royal Blue
+      '#a855f7', // Violet
+      '#f43f5e', // Rose
+      '#faf6ee'  // White/Cream
+    ];
+
+    function resizeHeroGrid() {
       hdpr = window.devicePixelRatio || 1;
       hw = heroSection.offsetWidth;
       hh = heroSection.offsetHeight;
-      heroGlassCanvas.width = hw * hdpr;
-      heroGlassCanvas.height = hh * hdpr;
+      heroGridCanvas.width = hw * hdpr;
+      heroGridCanvas.height = hh * hdpr;
       hctx.scale(hdpr, hdpr);
+
+      cols = Math.ceil(hw / gridSize);
+      rows = Math.ceil(hh / gridSize);
+
+      cellIntensities = [];
+      cellColors = [];
+      for (let c = 0; c < cols; c++) {
+        cellIntensities[c] = [];
+        cellColors[c] = [];
+        for (let r = 0; r < rows; r++) {
+          cellIntensities[c][r] = 0;
+          const hash = (c * 37 + r * 61 + (c ^ r) * 13) % vibrantPalette.length;
+          cellColors[c][r] = vibrantPalette[hash];
+        }
+      }
     }
 
-    window.addEventListener('resize', resizeHeroGlass);
-    resizeHeroGlass();
+    window.addEventListener('resize', resizeHeroGrid);
+    resizeHeroGrid();
 
     heroSection.addEventListener('mousemove', (e) => {
       const rect = heroSection.getBoundingClientRect();
@@ -512,49 +542,94 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     let glassTime = 0;
-    function renderHeroGlass() {
+    function renderHeroGrid() {
       glassTime += 0.02;
 
-      curX += (targetX - curX) * 0.10;
-      curY += (targetY - curY) * 0.10;
+      if (isMouseInside) {
+        curX += (targetX - curX) * 0.09;
+        curY += (targetY - curY) * 0.09;
+      } else {
+        // Gentle organic floating light path when idle
+        curX = hw * 0.50 + Math.sin(glassTime * 0.6) * (hw * 0.28);
+        curY = hh * 0.44 + Math.cos(glassTime * 0.45) * (hh * 0.22);
+      }
 
       hctx.clearRect(0, 0, hw, hh);
 
-      const activeX = isMouseInside ? curX : (hw * 0.5 + Math.sin(glassTime * 0.8) * 90);
-      const activeY = isMouseInside ? curY : (hh * 0.45 + Math.cos(glassTime * 0.6) * 60);
-      const radius = isMouseInside ? 360 : 280;
-
-      // Multi-layer radiant translucent glass spotlight popping from behind
-      const grad = hctx.createRadialGradient(activeX, activeY, 0, activeX, activeY, radius);
-      grad.addColorStop(0.00, 'rgba(74, 222, 128, 0.45)'); // Transform9 vibrant lime green
-      grad.addColorStop(0.26, 'rgba(56, 189, 248, 0.38)'); // Electric cyan
-      grad.addColorStop(0.52, 'rgba(139, 92, 246, 0.28)'); // Neon violet
-      grad.addColorStop(0.76, 'rgba(244, 63, 94, 0.16)');  // Rose / magenta
-      grad.addColorStop(1.00, 'rgba(9, 12, 10, 0.00)');   // Smooth fade to black
-
-      hctx.fillStyle = grad;
+      // 1. Draw base square grid lines
+      hctx.strokeStyle = 'rgba(255, 255, 255, 0.035)';
+      hctx.lineWidth = 1;
       hctx.beginPath();
-      hctx.arc(activeX, activeY, radius, 0, Math.PI * 2);
+      for (let c = 0; c <= cols; c++) {
+        const x = c * gridSize;
+        hctx.moveTo(x, 0);
+        hctx.lineTo(x, hh);
+      }
+      for (let r = 0; r <= rows; r++) {
+        const y = r * gridSize;
+        hctx.moveTo(0, y);
+        hctx.lineTo(hw, y);
+      }
+      hctx.stroke();
+
+      // 2. Light up grid squares under and around the moving light source
+      const radius = 280;
+      for (let c = 0; c < cols; c++) {
+        for (let r = 0; r < rows; r++) {
+          const sqCenterX = c * gridSize + gridSize / 2;
+          const sqCenterY = r * gridSize + gridSize / 2;
+          const dist = Math.hypot(sqCenterX - curX, sqCenterY - curY);
+
+          let targetInt = 0;
+          if (dist < radius) {
+            targetInt = Math.pow(Math.max(0, 1 - dist / radius), 1.5);
+          }
+
+          if (targetInt > cellIntensities[c][r]) {
+            cellIntensities[c][r] = targetInt;
+          } else {
+            cellIntensities[c][r] *= 0.93; // Smooth decaying trail of lit squares
+          }
+
+          const currentInt = cellIntensities[c][r];
+          if (currentInt > 0.015) {
+            const colorHex = cellColors[c][r];
+            const x = c * gridSize;
+            const y = r * gridSize;
+
+            // Fill illuminated square with color and alpha
+            hctx.fillStyle = colorHex;
+            hctx.globalAlpha = Math.min(0.85, currentInt * 0.95);
+            hctx.fillRect(x + 1.5, y + 1.5, gridSize - 3, gridSize - 3);
+
+            // Crisp neon border for lit squares
+            hctx.strokeStyle = '#ffffff';
+            hctx.globalAlpha = Math.min(0.65, currentInt * 0.75);
+            hctx.lineWidth = 1.2;
+            hctx.strokeRect(x + 1, y + 1, gridSize - 2, gridSize - 2);
+          }
+        }
+      }
+      hctx.globalAlpha = 1.0;
+
+      // 3. Central floating energy orb behind the frosted glass
+      const coreGrad = hctx.createRadialGradient(curX, curY, 0, curX, curY, radius * 0.7);
+      coreGrad.addColorStop(0.0, 'rgba(74, 222, 128, 0.40)');
+      coreGrad.addColorStop(0.3, 'rgba(56, 189, 248, 0.28)');
+      coreGrad.addColorStop(0.6, 'rgba(168, 85, 247, 0.18)');
+      coreGrad.addColorStop(1.0, 'rgba(9, 12, 10, 0)');
+      hctx.fillStyle = coreGrad;
+      hctx.beginPath();
+      hctx.arc(curX, curY, radius * 0.7, 0, Math.PI * 2);
       hctx.fill();
 
-      // Subtle frosted glass micro-grain highlight around cursor
-      if (isMouseInside) {
-        const coreGrad = hctx.createRadialGradient(activeX, activeY, 0, activeX, activeY, 80);
-        coreGrad.addColorStop(0, 'rgba(255, 255, 255, 0.18)');
-        coreGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        hctx.fillStyle = coreGrad;
-        hctx.beginPath();
-        hctx.arc(activeX, activeY, 80, 0, Math.PI * 2);
-        hctx.fill();
-      }
-
-      requestAnimationFrame(renderHeroGlass);
+      requestAnimationFrame(renderHeroGrid);
     }
-    requestAnimationFrame(renderHeroGlass);
+    requestAnimationFrame(renderHeroGrid);
   }
 
   // =========================================================================
-  // 12b. Transform9 Signature Jagged Voxel Pixel Transition Boundary Engine
+  // 12b. Transform9 Signature Jagged Voxel Pixel Transition Engine (Down & UP)
   // =========================================================================
   const pixelBoundary = document.getElementById('pixelBoundary');
   const pixelWaveCanvas = document.getElementById('pixelWaveCanvas');
@@ -569,6 +644,27 @@ document.addEventListener('DOMContentLoaded', () => {
     let fringeMap = [];
     let boundaryMouseX = -1000;
     let boundaryMouseY = -1000;
+
+    let targetProgress = 0;
+    let currentProgress = 0;
+
+    // Both Scroll Down AND Scroll Up are calculated dynamically from viewport position
+    function updateTransitionProgress() {
+      if (!pixelBoundary) return;
+      const rect = pixelBoundary.getBoundingClientRect();
+      const vh = window.innerHeight;
+
+      // Transition begins as boundary enters viewport bottom (rect.top <= vh)
+      // Transition completes as boundary passes towards center (rect.top <= vh * 0.25)
+      const startY = vh;
+      const endY = vh * 0.20;
+      const rawP = (startY - rect.top) / (startY - endY);
+      targetProgress = Math.max(0, Math.min(1, rawP));
+    }
+
+    window.addEventListener('scroll', updateTransitionProgress, { passive: true });
+    window.addEventListener('resize', updateTransitionProgress, { passive: true });
+    updateTransitionProgress();
 
     pixelBoundary.addEventListener('mousemove', (e) => {
       const rect = pixelBoundary.getBoundingClientRect();
@@ -595,7 +691,6 @@ document.addEventListener('DOMContentLoaded', () => {
       cols = Math.ceil(pw / blockSize);
 
       // Authentic stepped profile from Transform9 screenshots (media_1789647933474.png):
-      // Height in blocks (1 to 4) above the base deck
       const stepHeights = [1, 1, 3, 2, 2, 4, 3, 1, 2, 3, 4, 2, 2, 3, 2, 3];
       const colorPalettes = [
         ['#090c0a', '#4ade80'],
@@ -631,28 +726,48 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderPixelWave() {
       waveTime += 0.02;
 
+      // Liquid organic lerp for scroll up and down: 0.12 ensures responsive, natural transition
+      const delta = (targetProgress - currentProgress) * 0.12;
+      currentProgress += delta;
+      if (Math.abs(targetProgress - currentProgress) < 0.0004) {
+        currentProgress = targetProgress;
+      }
+
       // 1. Fill entire canvas with dark hero black (#090c0a) to seamlessly continue the hero
       pctx.fillStyle = '#090c0a';
       pctx.fillRect(0, 0, pw, ph);
 
-      // Base Y of the solid cream deck at the bottom
-      const baseY = ph - blockSize * 1.0;
+      // Base Y of the solid cream deck: rises when scrolling DOWN, retreats when scrolling UP
+      const targetBaseY = ph - blockSize * 1.2;
+      const hiddenBaseY = ph + blockSize * 1.5;
+      const currentDeckY = hiddenBaseY - (hiddenBaseY - targetBaseY) * currentProgress;
 
       for (let c = 0; c < cols; c++) {
         const x = c * blockSize;
         const config = fringeMap[c] || { heightInBlocks: 2, colors: ['#faf6ee', '#4ade80'] };
 
+        // Column wave delay creates the sweeping cascading arc
+        const colDelay = Math.sin((c / cols) * Math.PI) * 0.22 + (c / cols) * 0.14;
+        const colProgress = Math.max(0, Math.min(1, (currentProgress - colDelay * 0.32) / 0.68));
+
         // Subtle organic ripple along the fringe
         const ripple = Math.sin(waveTime + c * 0.6) * 3;
+        const colDeckY = currentDeckY + ripple;
 
         // 2. Draw solid cream deck at the bottom connecting directly into #workshop
-        pctx.fillStyle = '#faf6ee';
-        pctx.fillRect(x, baseY + ripple, blockSize + 0.5, ph - (baseY + ripple) + 2);
+        if (colDeckY < ph) {
+          pctx.fillStyle = '#faf6ee';
+          pctx.fillRect(x, colDeckY, blockSize + 0.5, ph - colDeckY + 4);
+        }
 
-        // 3. Draw stepped fringe blocks rising upward into the dark hero
-        const blocksCount = config.heightInBlocks;
-        for (let b = 0; b < blocksCount; b++) {
-          const y = baseY + ripple - (b + 1) * blockSize;
+        // 3. Draw stepped fringe blocks: rise when scrolling down, dissolve down when scrolling up
+        const targetBlocksCount = config.heightInBlocks;
+        const currentBlocksCount = Math.floor(colProgress * (targetBlocksCount + 1));
+
+        for (let b = 0; b < currentBlocksCount; b++) {
+          const y = colDeckY - (b + 1) * blockSize;
+          if (y + blockSize < 0) continue;
+
           let color = config.colors[b % config.colors.length];
 
           // Check if cursor is hovering over this block

@@ -60,9 +60,13 @@
 
     <!-- STAGE 1: Dark Tech Terminal Hero Section (Monaspace Aesthetic) -->
     <section class="tech-hero-section" id="hero">
-      <!-- Interactive Translucent Frosted Glass Spotlight Canvas -->
-      <canvas id="heroGlassCanvas" class="hero-glass-canvas" aria-hidden="true"></canvas>
+      <!-- 1. Background Grid & Illuminated Squares Light Canvas (Behind frosted glass) -->
+      <canvas id="heroGridCanvas" class="hero-grid-canvas" aria-hidden="true"></canvas>
 
+      <!-- 2. Frosted Translucent Glass Layer (In front of squares/light, behind text) -->
+      <div class="hero-frosted-glass-overlay" aria-hidden="true"></div>
+
+      <!-- 3. Foreground Text & UI Content -->
       <div class="container tech-hero-layout">
         
         <!-- Hero Information Column -->
