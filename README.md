@@ -2,8 +2,6 @@
 
 An editorial, systems-focused personal portfolio and digital garden. Built with vanilla HTML5, CSS3, and high-performance Canvas engines—zero heavy UI frameworks, pure web craft.
 
-![Aditya Tiwari Portfolio](goal.png)
-
 ---
 
 ## ✦ Key Features
