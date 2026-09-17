@@ -1889,7 +1889,7 @@ header.site-header.site-header-dark .tool-icon-btn:hover,
 .pixel-scroll-track {
   position: relative;
   width: 100%;
-  height: 140vh;
+  height: 160vh;
   background-color: var(--term-bg);
 }
 
@@ -1907,7 +1907,7 @@ header.site-header.site-header-dark .tool-icon-btn:hover,
 
 @media (max-width: 768px) {
   .pixel-scroll-track {
-    height: 130vh;
+    height: 140vh;
   }
   .transform9-pixel-boundary {
     height: 100vh;
@@ -1927,14 +1927,14 @@ header.site-header.site-header-dark .tool-icon-btn:hover,
   position: relative;
   background: var(--bg-canvas);
   color: var(--ink);
-  margin-top: -45vh;
+  margin-top: -35vh;
   padding: 30px 0 80px;
   z-index: 35;
 }
 
 @media (max-width: 768px) {
   .editorial-deck-section {
-    margin-top: -35vh;
+    margin-top: -25vh;
     padding: 20px 0 60px;
   }
 }
