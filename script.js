@@ -713,9 +713,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const rect = pixelBoundary.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      // Starts as boundary enters viewport, completes smoothly as workshop arrives into full view
-      const startY = vh * 0.95;
-      const endY = 40;
+      // Starts as boundary enters lower viewport, completes smoothly as workshop arrives into full view
+      const startY = vh * 1.05;
+      const endY = -rect.height * 0.15;
       const rawP = (startY - rect.top) / (startY - endY);
       targetProgress = Math.max(0, Math.min(1, rawP));
     }
