@@ -666,12 +666,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================================================
   // 12b. Transform9 Signature Jagged Voxel Pixel Transition Engine (Down & UP)
   // =========================================================================
-  const pixelScrollTrack = document.getElementById('pixelScrollTrack');
-  const pixelBoundary = document.getElementById('pixelBoundary');
-  const pixelWaveCanvas = document.getElementById('pixelWaveCanvas');
+  const pixelScrollTrack = document.getElementById("pixelScrollTrack");
+  const pixelBoundary = document.getElementById("pixelBoundary");
+  const pixelWaveCanvas = document.getElementById("pixelWaveCanvas");
 
   if (pixelBoundary && pixelWaveCanvas) {
-    const pctx = pixelWaveCanvas.getContext('2d');
+    const pctx = pixelWaveCanvas.getContext("2d");
     let pw = 0;
     let ph = 0;
     let pdpr = window.devicePixelRatio || 1;
@@ -684,7 +684,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let targetProgress = 0;
     let currentProgress = 0;
 
-    // Smooth scroll progress mapped through track entrance and pinned scroll
     function updateTransitionProgress() {
       const track = pixelScrollTrack || pixelBoundary;
       if (!track) return;
@@ -692,9 +691,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const vh = window.innerHeight;
       const trackHeight = track.offsetHeight;
 
-      // Transition maps directly to the pinned scroll duration
-      // Pinned when rect.top goes from 0 down to -(trackHeight - vh)
-      // With 0.10*vh anticipation as hero finishes
       const startY = vh * 0.10;
       const endY = -(trackHeight - vh);
       const scrollRange = Math.max(1, startY - endY);
@@ -702,17 +698,17 @@ document.addEventListener('DOMContentLoaded', () => {
       targetProgress = Math.max(0, Math.min(1, rawP));
     }
 
-    window.addEventListener('scroll', updateTransitionProgress, { passive: true });
-    window.addEventListener('resize', updateTransitionProgress, { passive: true });
+    window.addEventListener("scroll", updateTransitionProgress, { passive: true });
+    window.addEventListener("resize", updateTransitionProgress, { passive: true });
     updateTransitionProgress();
 
-    window.addEventListener('mousemove', (e) => {
+    window.addEventListener("mousemove", (e) => {
       const rect = pixelBoundary.getBoundingClientRect();
       boundaryMouseX = e.clientX - rect.left;
       boundaryMouseY = e.clientY - rect.top;
     });
 
-    window.addEventListener('mouseleave', () => {
+    window.addEventListener("mouseleave", () => {
       boundaryMouseX = -1000;
       boundaryMouseY = -1000;
     });
@@ -725,20 +721,20 @@ document.addEventListener('DOMContentLoaded', () => {
       pixelWaveCanvas.height = ph * pdpr;
       pctx.scale(pdpr, pdpr);
 
-      // BIG CHUNKY SQUARES: 10-12 columns on desktop (~120-140px blocks), 8 on tablet, 5 on mobile
-      const targetCols = pw < 600 ? 5 : (pw < 1024 ? 8 : 10);
+      // Bold architectural squares: 6 columns on desktop (~240px blocks), 4 on tablet, 3 on mobile
+      const targetCols = pw < 600 ? 3 : (pw < 1024 ? 4 : 6);
       blockSize = Math.ceil(pw / targetCols);
       cols = Math.ceil(pw / blockSize);
       rows = Math.ceil(ph / blockSize);
     }
 
-    window.addEventListener('resize', resizePixelWave);
+    window.addEventListener("resize", resizePixelWave);
     resizePixelWave();
 
-    const voxelPalette = ['#2563eb', '#4ade80', '#090c0a', '#4ade80', '#2563eb'];
+    const voxelPalette = ["#2563eb", "#4ade80", "#090c0a", "#4ade80", "#2563eb"];
 
     function renderPixelWave() {
-      // Responsive momentum lerp: identical, symmetrical behavior in both scroll directions
+      // Smooth momentum lerp: calibrated for a luxurious, deliberate transition pace
       const delta = (targetProgress - currentProgress) * 0.08;
       currentProgress += delta;
       if (Math.abs(targetProgress - currentProgress) < 0.0002) {
@@ -746,21 +742,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // Fast-path solid renders at exact bounds
-      if (currentProgress <= 0.01) {
-        pctx.fillStyle = '#090c0a';
+      if (currentProgress <= 0.005) {
+        pctx.fillStyle = "#090c0a";
         pctx.fillRect(0, 0, pw, ph);
         requestAnimationFrame(renderPixelWave);
         return;
       }
-      if (currentProgress >= 0.99) {
-        pctx.fillStyle = '#faf6ee';
+      if (currentProgress >= 0.995) {
+        pctx.fillStyle = "#faf6ee";
         pctx.fillRect(0, 0, pw, ph);
         requestAnimationFrame(renderPixelWave);
         return;
       }
 
       // Base fill matching hero black
-      pctx.fillStyle = '#090c0a';
+      pctx.fillStyle = "#090c0a";
       pctx.fillRect(0, 0, pw, ph);
 
       // Render 3-layer moving voxel transition across the grid
@@ -770,26 +766,26 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let c = 0; c < cols; c++) {
           const x = c * blockSize;
 
-          // Organic column wave + deterministic pseudo-random stepped jitter
-          const colDelay = Math.sin((c / cols) * Math.PI) * 0.12 + (c / cols) * 0.08;
-          const colP = Math.max(0, Math.min(1, (currentProgress - colDelay * 0.15) / 0.85));
+          // Organic column crest delay: adds noticeable delay/stagger across columns
+          const colDelay = Math.sin((c / cols) * Math.PI) * 0.16 + (c / cols) * 0.08;
+          const colP = Math.max(0, Math.min(1, (currentProgress - colDelay * 0.12) / 0.88));
 
-          const jitter = (Math.sin(c * 12.9898 + r * 78.233) * 43758.5453 % 1 - 0.5) * 0.8;
+          const jitter = (Math.sin(c * 12.9898 + r * 78.233) * 43758.5453 % 1 - 0.5) * 0.5;
 
-          // Frontier moves smoothly from below screen to above screen
-          const frontierY = (ph + blockSize * 1.5) - (ph + blockSize * 5.5) * colP + jitter * blockSize;
+          // Frontier moves smoothly across the extended scroll runway
+          const frontierY = (ph + blockSize) - (ph + blockSize * 4.2) * colP + jitter * blockSize;
           const blockDist = (y - frontierY) / blockSize;
 
           let blockColor;
           if (blockDist < 0) {
             // Layer 1: Ahead of wave -> Pure Hero Black
-            blockColor = '#090c0a';
-          } else if (blockDist > 2.8) {
+            blockColor = "#090c0a";
+          } else if (blockDist > 2.5) {
             // Layer 3: Behind wave -> Pure Offwhite Cream (seamlessly reveals workshop)
-            blockColor = '#faf6ee';
+            blockColor = "#faf6ee";
           } else {
-            // Layer 2: The Moving Voxel Frontier (Electric Blue, Vivid Lime, Dark Accents)
-            const paletteIdx = Math.abs((c * 2 + Math.floor(blockDist * 3)) % voxelPalette.length);
+            // Layer 2: The Moving Voxel Frontier (dwells longer in colors for a satisfying, rich reveal)
+            const paletteIdx = Math.abs((c * 2 + Math.floor(blockDist * 2.2)) % voxelPalette.length);
             blockColor = voxelPalette[paletteIdx];
           }
 
@@ -799,7 +795,7 @@ document.addEventListener('DOMContentLoaded', () => {
             boundaryMouseY >= y && boundaryMouseY < y + blockSize
           );
           if (isHovered) {
-            blockColor = '#4ade80';
+            blockColor = "#4ade80";
           }
 
           // Render solid block with 0.5px overlap to eliminate any subpixel lines (BORDERLESS)
@@ -810,7 +806,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       requestAnimationFrame(renderPixelWave);
     }
-    requestAnimationFrame(renderPixelWave);
+        requestAnimationFrame(renderPixelWave);
   }
 
 
