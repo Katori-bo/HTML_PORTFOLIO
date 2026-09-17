@@ -714,8 +714,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const vh = window.innerHeight;
 
       // Starts as boundary enters lower viewport, completes smoothly as workshop arrives into full view
-      const startY = vh * 1.05;
-      const endY = -rect.height * 0.15;
+      const startY = vh * 0.92;
+      const endY = 60;
       const rawP = (startY - rect.top) / (startY - endY);
       targetProgress = Math.max(0, Math.min(1, rawP));
     }
@@ -794,7 +794,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // If transition is fully completed (scrolled into workshop), render 100% solid flat cream
       // Completely eliminates ANY leftover colored blocks, vertical lines, or seams!
-      if (currentProgress >= 0.992) {
+      if (currentProgress >= 0.97) {
         pctx.fillStyle = '#faf6ee';
         pctx.fillRect(0, 0, pw, ph);
         requestAnimationFrame(renderPixelWave);
@@ -806,11 +806,10 @@ document.addEventListener('DOMContentLoaded', () => {
       pctx.fillRect(0, 0, pw, ph);
 
       // Base Y of the solid cream deck:
-      // Climbs from below canvas (hiddenBaseY) completely up through top (targetBaseY)
-      // Scaled for 7 blocks in depth across the 220px boundary
-      const targetBaseY = -blockSize * 2.0;
-      const hiddenBaseY = ph + blockSize * 7.5;
-      const currentDeckY = hiddenBaseY - (hiddenBaseY - targetBaseY) * currentProgress;
+      // Starts with tips peeking at progress 0, smoothly settles at bottom seam (ph + 2)
+      const initialBaseY = ph + blockSize * 2.0;
+      const finalBaseY = ph + 2;
+      const currentDeckY = initialBaseY - (initialBaseY - finalBaseY) * Math.min(1, currentProgress * 1.6);
 
       // Calculate column deck heights and wave delays
       const colDeckYs = [];
@@ -849,9 +848,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const config = fringeMap[c] || { heightInBlocks: 7, colors: colorPalettes[0] };
         const { colDeckY, colProgress } = colDeckYs[c];
 
-        // Staggered start per column: distributes resolution across progress 0.44 to 0.88
-        const colResolveStart = 0.44 + (((c * 7) % cols) / cols) * 0.38;
-        const colResolveDuration = 0.16;
+        // Staggered start per column: distributes resolution across progress 0.30 to 0.85
+        const colResolveStart = 0.30 + (((c * 7) % cols) / cols) * 0.42;
+        const colResolveDuration = 0.22;
 
         const targetBlocksCount = config.heightInBlocks;
         const currentBlocksCount = Math.floor(colProgress * (targetBlocksCount + 1));
@@ -861,7 +860,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (y + blockSize < 0 || y >= ph) continue;
 
           // Block-level delay within the column: bottom blocks resolve slightly before top blocks
-          const blockDelay = (b / 7) * 0.05;
+          const blockDelay = (b / 7) * 0.08;
           const blockResolveRatio = Math.max(0, Math.min(1, (currentProgress - (colResolveStart + blockDelay)) / colResolveDuration));
 
           let origColor = config.colors[b % config.colors.length];
