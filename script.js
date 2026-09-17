@@ -713,10 +713,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const rect = pixelBoundary.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      // Extended scroll runway so the user scrolls more & the transition feels pronounced
-      // Starts as boundary enters lower viewport, completes smoothly as user scrolls into workshop
-      const startY = vh * 1.15;
-      const endY = -rect.height * 0.35;
+      // Starts as boundary enters viewport, completes smoothly as workshop arrives into full view
+      const startY = vh * 0.95;
+      const endY = 40;
       const rawP = (startY - rect.top) / (startY - endY);
       targetProgress = Math.max(0, Math.min(1, rawP));
     }
@@ -786,8 +785,8 @@ document.addEventListener('DOMContentLoaded', () => {
       waveTime += 0.02;
 
       // Smooth liquid organic lerp for scroll up and down:
-      // Delta of 0.048 gives an extra ~1 second of smooth fluid momentum/travel
-      const delta = (targetProgress - currentProgress) * 0.048;
+      // Delta of 0.065 gives a smooth fluid momentum/travel
+      const delta = (targetProgress - currentProgress) * 0.065;
       currentProgress += delta;
       if (Math.abs(targetProgress - currentProgress) < 0.0002) {
         currentProgress = targetProgress;
@@ -898,6 +897,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     requestAnimationFrame(renderPixelWave);
   }
+
 
   // =========================================================================
   // 12c. Arcade Page Frosted Glass & Illuminated Grid Squares Engine
