@@ -900,6 +900,43 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================================
+  // 12b-2. Interactive Mouse-Driven Workshop Reveal & Space Filler Engine
+  // =========================================================================
+  const workshopSection = document.getElementById('workshop');
+  if (workshopSection) {
+    const deckHeader = workshopSection.querySelector('.deck-header-row');
+    const deckGrid = workshopSection.querySelector('.editorial-grid');
+
+    let currentLift = 0;
+    let targetLift = 0;
+
+    // Strictly triggered by MOUSE MOVEMENT — Never runs autonomously on timers
+    window.addEventListener('mousemove', (e) => {
+      if (!pixelBoundary) return;
+      const rect = pixelBoundary.getBoundingClientRect();
+      const vh = window.innerHeight;
+
+      // Only engage when the transition boundary / workshop is visible in viewport
+      if (rect.bottom > -100 && rect.top < vh) {
+        // As the mouse moves higher up into the cream void, pull the bottom text up
+        const mouseNormY = Math.max(0, Math.min(1, e.clientY / vh));
+        // Upward pull curve: cursor in upper area pulls text up by up to 210px
+        const upwardPull = Math.pow(1 - mouseNormY, 1.25);
+        targetLift = upwardPull * 210;
+
+        currentLift += (targetLift - currentLift) * 0.28;
+
+        if (deckHeader) {
+          deckHeader.style.transform = `translate3d(0, -${currentLift.toFixed(1)}px, 0)`;
+        }
+        if (deckGrid) {
+          deckGrid.style.transform = `translate3d(0, -${(currentLift * 0.82).toFixed(1)}px, 0)`;
+        }
+      }
+    }, { passive: true });
+  }
+
+  // =========================================================================
   // 12c. Arcade Page Frosted Glass & Illuminated Grid Squares Engine
   // =========================================================================
   const arcadeGridCanvas = document.getElementById('arcadeGridCanvas');
