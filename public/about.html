@@ -3,27 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About Aditya Tiwari — Computer Science student, systems programmer, and researcher.">
+  <meta name="theme-color" content="#faf6ee">
   <title>About | Aditya Tiwari</title>
-  <style>
-    body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0b1020;color:#eef2ff;line-height:1.7}
-    main{width:min(850px,90%);margin:80px auto}
-    a{color:#8fb7ff} .card{background:#11182d;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:32px}
-    h1{font-size:clamp(2.5rem,6vw,4rem);margin-top:0} h2{margin-top:32px}
-    p{color:#a8b1c7} .back{display:inline-block;margin-bottom:24px}
-  </style>
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../script.js" defer></script>
 </head>
 <body>
-  <main>
-    <a class="back" href="../index.html">← Back to portfolio</a>
-    <div class="card">
-      <h1>About Me</h1>
-      <p>I'm Aditya Tiwari, a Computer Science student at SOA, ITER with a strong interest in systems, networking, audio software, and machine learning.</p>
-      <p>I enjoy taking a problem apart, understanding how the underlying pieces interact, and then building a working solution. My projects range from native audio and network synchronization to NLP research experiments.</p>
-      <h2>What I'm exploring</h2>
-      <p>I'm currently strengthening my data structures and algorithms fundamentals while learning more about Linux, cloud technologies, AWS, and systems design.</p>
-      <h2>How I build</h2>
-      <p>I value practical projects, clear engineering decisions, testing, and reproducibility. I use GitHub to document the things I build and the ideas I learn along the way.</p>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="../index.html" class="header-logo" aria-label="Aditya Tiwari home">
+        <span>Aditya</span>
+        <span class="header-logo-flourish" aria-hidden="true">🌱</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="../index.html">Portfolio</a>
+        <a href="../index.html#projects">Projects</a>
+        <a href="../index.html#skills">Ingredients</a>
+        <a href="../archive.html">Archive</a>
+        <a href="./contact.html">Contact</a>
+      </nav>
+
+      <div class="header-tools">
+        <a class="tool-icon-btn" href="../arcade.html" title="Play Arcade" aria-label="Arcade">🎮</a>
+        <button type="button" class="tool-icon-btn" id="cursorToggleBtn" title="Toggle Sparkle Cursor" aria-label="Sparkle Cursor">✨</button>
+        <a class="btn-tactile btn-peach" href="../index.html" style="padding: 8px 16px; font-size: 0.85rem;">← Main Site</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 50px 0 70px; max-width: 860px;">
+    <div style="margin-bottom: 24px;">
+      <a class="btn-tactile btn-mint" style="padding: 6px 14px; font-size: 0.82rem;" href="../index.html">
+        ← Back to Main Portfolio
+      </a>
+    </div>
+
+    <div>
+      <span class="sticker sticker-peach sticker-tilt-left">★ BEHIND THE SCREENS</span>
+      <h1 style="font-size: clamp(2.5rem, 5.5vw, 4.4rem); margin: 12px 0 16px;">
+        About <em>Me.</em>
+      </h1>
+    </div>
+
+    <div class="flavor-card card-mint" style="padding: 36px; margin-bottom: 28px;">
+      <p style="font-size: 1.15rem; line-height: 1.75; margin-bottom: 20px;">
+        I'm <strong>Aditya Tiwari</strong>, a Computer Science student at <strong>SOA, ITER</strong> in Bhubaneswar, Odisha. I'm drawn to understanding the bedrock of computer systems: how network packets travel, how operating systems manage hardware interrupts, how native C/C++ audio pipelines minimize latency, and how machine learning models actually generalize.
+      </p>
+
+      <p style="font-size: 1.05rem; line-height: 1.75; color: var(--ink-muted); margin-bottom: 24px;">
+        Rather than assembling black-box npm packages, I take joy in writing software where performance, predictability, and memory semantics matter.
+      </p>
+
+      <h2 style="font-size: 1.6rem; margin: 28px 0 12px;">What Drives My Work</h2>
+      <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: 1rem;">
+        <li style="display: flex; gap: 10px;">
+          <span style="color: var(--ink); font-weight: 900;">✦</span>
+          <div><strong>Low-Level Systems &amp; AAudio:</strong> Building AudioMesh to synchronize distributed audio across local wireless nodes with sub-millisecond clock drift control.</div>
+        </li>
+        <li style="display: flex; gap: 10px;">
+          <span style="color: var(--ink); font-weight: 900;">★</span>
+          <div><strong>Reproducible NLP Research:</strong> Investigating literary dialogue attribution with PyTorch, prioritizing clean ablation studies over hype.</div>
+        </li>
+        <li style="display: flex; gap: 10px;">
+          <span style="color: var(--ink); font-weight: 900;">✸</span>
+          <div><strong>Boutique Craftsmanship:</strong> Treating code, typography, and user experience with equal care and artistic integrity.</div>
+        </li>
+      </ul>
+
+      <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 32px;">
+        <a class="btn-tactile btn-peach" href="../index.html#projects">Taste The Projects ↓</a>
+        <a class="btn-tactile btn-lavender" href="../library.html?type=all">Browse My Media Shelf (50+) 📚</a>
+      </div>
     </div>
   </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-muted);">
+        © <span data-current-year>2026</span> Aditya Tiwari · Natural engineering.
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>

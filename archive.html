@@ -1,1 +1,248 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080a10"><title>My Archive | Aditya</title><link rel="stylesheet" href="./styles.css"><script src="./script.js" defer></script></head><body class="archive-page"><nav><div class="container nav-inner"><a class="brand" href="./index.html">Aditya<span>.</span></a><div class="nav-links"><a href="./index.html">Professional</a><a href="./arcade.html">Arcade</a></div></div></nav><main class="container archive-main"><p class="eyebrow">ADITYA'S PERSONAL ARCHIVE</p><h1>Stories worth <span class="gradient">experiencing.</span></h1><p class="lead">A shelf of anime, manga, manhwa, and books I've enjoyed.</p><div class="archive-cards"><a class="archive-card" href="./library.html?type=manga"><span class="archive-symbol">漫</span><h2>Manga</h2><p>Ink, panels & stories</p><span class="card-link">Browse collection →</span></a><a class="archive-card" href="./library.html?type=manhwa"><span class="archive-symbol">웹</span><h2>Manhwa</h2><p>Webtoons & adventures</p><span class="card-link">Browse collection →</span></a><a class="archive-card" href="./library.html?type=anime"><span class="archive-symbol">ア</span><h2>Anime</h2><p>Worlds brought to life</p><span class="card-link">Browse collection →</span></a><a class="archive-card" href="./library.html?type=books"><span class="archive-symbol">書</span><h2>Books</h2><p>Ideas worth keeping</p><span class="card-link">Browse collection →</span></a></div></main><footer><div class="container"><a href="./index.html">← Back to professional portfolio</a></div></footer></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Aditya Tiwari's Archive Hub — Curated Manga, Manhwa, Anime, and Books.">
+  <meta name="theme-color" content="#faf6ee">
+  <title>Archive Hub | Aditya Tiwari</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./script.js" defer></script>
+  <style>
+    .archive-category-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 26px;
+      margin: 40px 0 60px;
+    }
+
+    .archive-hub-box {
+      background: var(--bg-card-white);
+      border: var(--border-pop);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-pop);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .archive-hub-box:hover {
+      transform: translate(-4px, -4px);
+      box-shadow: var(--shadow-pop-lg);
+    }
+
+    .archive-hub-box.box-mint { background: var(--mint); }
+    .archive-hub-box.box-peach { background: var(--peach); }
+    .archive-hub-box.box-lavender { background: var(--lavender); }
+    .archive-hub-box.box-lemon { background: var(--lemon); }
+
+    .archive-corner-stamp {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+      user-select: none;
+      pointer-events: none;
+      opacity: 0.22;
+      color: var(--ink);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .archive-hub-box:hover .archive-corner-stamp {
+      opacity: 0.45;
+      transform: scale(1.06);
+    }
+
+    .archive-stamp-code {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--ink);
+    }
+
+    .archive-mini-thumbs {
+      display: flex;
+      gap: 8px;
+      margin: 20px 0;
+    }
+
+    .archive-mini-thumb {
+      width: 70px;
+      aspect-ratio: 2/3;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+      border: var(--border-thin);
+      box-shadow: 2px 2px 0px var(--ink);
+    }
+
+    @media (max-width: 760px) {
+      .archive-category-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="theme-bookshop">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="./index.html" class="header-logo" aria-label="Aditya Tiwari home">
+        <span>Aditya</span>
+        <span class="header-logo-flourish" aria-hidden="true">🌱</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="./index.html">Home</a>
+        <a href="./projects.html">Projects</a>
+        <a href="./library.html?type=all">Complete Shelf</a>
+        <a href="./arcade.html">Arcade</a>
+        <a href="./beyond.html">Beyond</a>
+      </nav>
+
+      <div class="header-tools">
+        <a class="tool-icon-btn" href="./arcade.html" title="Play Arcade" aria-label="Arcade">🎮</a>
+        <button type="button" class="tool-icon-btn" id="cursorToggleBtn" title="Toggle Sparkle Cursor" aria-label="Sparkle Cursor">✨</button>
+        <a class="btn-tactile btn-mint" href="./library.html?type=all" style="padding: 8px 16px; font-size: 0.85rem;">All 50+ Titles →</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Archive Content -->
+  <main class="container" style="padding: 60px 0;">
+    <div style="margin-bottom: 24px;">
+      <a class="btn-tactile btn-peach" style="padding: 6px 14px; font-size: 0.82rem;" href="./index.html">
+        ← Back to Main Portfolio
+      </a>
+    </div>
+
+    <div>
+      <span class="sticker sticker-mint sticker-tilt-left">★ CURATED CATEGORIES</span>
+      <h1 style="font-size: clamp(2.6rem, 6vw, 4.6rem); margin: 14px 0 10px;">
+        Stories worth <em>experiencing.</em>
+      </h1>
+      <p style="color: var(--ink-muted); font-size: 1.15rem; max-width: 680px;">
+        Pick a category below to explore individual titles, cover artwork, and reading notes.
+      </p>
+    </div>
+
+    <div class="archive-category-grid">
+
+      <!-- 1. Manga (Mint Box) -->
+      <a class="archive-hub-box box-mint tilt-card" href="./library.html?type=manga">
+        <div class="archive-corner-stamp" aria-hidden="true">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            <path d="M8 7h8"></path>
+            <path d="M8 11h8"></path>
+          </svg>
+          <span class="archive-stamp-code">01 // MANGA</span>
+        </div>
+        <span class="flavor-badge" style="width: fit-content;">24 VOLUMES</span>
+        <h2 style="font-size: 2.2rem; margin: 12px 0 6px;">Manga</h2>
+        <p style="color: var(--ink-muted);">Dynamic ink paneling, Shonen climaxes, and unforgettable artistic arcs.</p>
+
+        <div class="archive-mini-thumbs">
+          <img class="archive-mini-thumb" src="./assets/images/jjk.jpeg" alt="Jujutsu Kaisen" loading="lazy">
+          <img class="archive-mini-thumb" src="./assets/images/chiansaw%20man.webp" alt="Chainsaw Man" loading="lazy">
+          <img class="archive-mini-thumb" src="./assets/images/one_punch_man.jpg" alt="One Punch Man" loading="lazy">
+        </div>
+
+        <span class="flavor-card-link" style="margin-top: 14px;">Browse Manga Collection →</span>
+      </a>
+
+      <!-- 2. Manhwa (Peach Box) -->
+      <a class="archive-hub-box box-peach tilt-card" href="./library.html?type=manhwa">
+        <div class="archive-corner-stamp" aria-hidden="true">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+            <line x1="9" y1="7" x2="15" y2="7"></line>
+            <line x1="9" y1="11" x2="15" y2="11"></line>
+          </svg>
+          <span class="archive-stamp-code">02 // MANHWA</span>
+        </div>
+        <span class="flavor-badge" style="width: fit-content;">18 SERIES</span>
+        <h2 style="font-size: 2.2rem; margin: 12px 0 6px;">Manhwa</h2>
+        <p style="color: var(--ink-muted);">Vibrant vertical scrolling webtoons, dungeon ascents, and martial arts masters.</p>
+
+        <div class="archive-mini-thumbs">
+          <img class="archive-mini-thumb" src="./assets/images/solo_levelling.jpg" alt="Solo Leveling" loading="lazy">
+          <img class="archive-mini-thumb" src="./assets/images/omniscient_reader.jpg" alt="Omniscient Reader" loading="lazy">
+          <img class="archive-mini-thumb" src="./assets/images/tower_of_god.webp" alt="Tower of God" loading="lazy">
+        </div>
+
+        <span class="flavor-card-link" style="margin-top: 14px;">Browse Manhwa Collection →</span>
+      </a>
+
+      <!-- 3. Anime (Lavender Box) -->
+      <a class="archive-hub-box box-lavender tilt-card" href="./library.html?type=anime">
+        <div class="archive-corner-stamp" aria-hidden="true">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <span class="archive-stamp-code">03 // ANIME</span>
+        </div>
+        <span class="flavor-badge" style="width: fit-content;">33 SEASONS</span>
+        <h2 style="font-size: 2.2rem; margin: 12px 0 6px;">Anime</h2>
+        <p style="color: var(--ink-muted);">Cinematic directing, god-tier animation cuts, and timeless soundtracks.</p>
+
+        <div class="archive-mini-thumbs">
+          <img class="archive-mini-thumb" src="./assets/images/aot.jpeg" alt="Attack on Titan" loading="lazy">
+          <img class="archive-mini-thumb" src="./assets/images/freiren_journey_beyound.jpeg" alt="Frieren" loading="lazy">
+          <img class="archive-mini-thumb" src="./assets/images/demon_slyer.webp" alt="Demon Slayer" loading="lazy">
+        </div>
+
+        <span class="flavor-card-link" style="margin-top: 14px;">Browse Anime Collection →</span>
+      </a>
+
+      <!-- 4. Books (Lemon Box) -->
+      <a class="archive-hub-box box-lemon tilt-card" href="./library.html?type=books">
+        <div class="archive-corner-stamp" aria-hidden="true">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+          <span class="archive-stamp-code">04 // BOOKS</span>
+        </div>
+        <span class="flavor-badge" style="width: fit-content;">ESSENTIALS</span>
+        <h2 style="font-size: 2.2rem; margin: 12px 0 6px;">Books</h2>
+        <p style="color: var(--ink-muted);">Principles for focus, compounding habits, systems engineering, and strategic mindsets.</p>
+
+        <div class="archive-mini-thumbs">
+          <div style="width: 70px; aspect-ratio: 2/3; background: #fff; border: 1.5px solid #000; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 2px 2px 0px #000;">📖</div>
+          <div style="width: 70px; aspect-ratio: 2/3; background: #fff; border: 1.5px solid #000; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 2px 2px 0px #000;">🧠</div>
+          <div style="width: 70px; aspect-ratio: 2/3; background: #fff; border: 1.5px solid #000; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 2px 2px 0px #000;">⚡</div>
+        </div>
+
+        <span class="flavor-card-link" style="margin-top: 14px;">Browse Bookshelf →</span>
+      </a>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-links-row">
+        <a href="./index.html">Main Portfolio</a>
+        <a href="./library.html?type=all">Complete Shelf</a>
+        <a href="./arcade.html">Cyber Arcade</a>
+        <a href="./beyond.html">Beyond the Code</a>
+      </div>
+      <div style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-muted);">
+        © <span data-current-year>2026</span> Aditya Tiwari · Stories and code in harmony.
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

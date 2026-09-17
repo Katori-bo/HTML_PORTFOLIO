@@ -3,22 +3,105 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contact Aditya Tiwari — Computer Science student, systems programmer, and researcher.">
+  <meta name="theme-color" content="#faf6ee">
   <title>Contact | Aditya Tiwari</title>
-  <style>
-    body{margin:0;font-family:Inter,system-ui,sans-serif;background:#0b1020;color:#eef2ff;line-height:1.7}
-    main{width:min(850px,90%);margin:80px auto}.card{background:#11182d;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:32px}
-    a{color:#8fb7ff}.muted{color:#a8b1c7}.item{padding:16px 0;border-bottom:1px solid rgba(255,255,255,.08)}.item:last-child{border-bottom:0}
-  </style>
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../script.js" defer></script>
 </head>
 <body>
-  <main>
-    <a href="../index.html">← Back to portfolio</a>
-    <div class="card">
-      <h1>Let's connect</h1>
-      <p class="muted">The safest way to reach me is through my public profiles.</p>
-      <div class="item"><strong>GitHub</strong><br><a href="https://github.com/Katori-bo" target="_blank" rel="noreferrer">github.com/Katori-bo</a></div>
-      <div class="item"><strong>Portfolio</strong><br><a href="../index.html">Back to the main portfolio</a></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="../index.html" class="header-logo" aria-label="Aditya Tiwari home">
+        <span>Aditya</span>
+        <span class="header-logo-flourish" aria-hidden="true">🌱</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="../index.html">Portfolio</a>
+        <a href="../index.html#projects">Projects</a>
+        <a href="../index.html#skills">Ingredients</a>
+        <a href="../archive.html">Archive</a>
+        <a href="./about.html">About</a>
+      </nav>
+
+      <div class="header-tools">
+        <a class="tool-icon-btn" href="../arcade.html" title="Play Arcade" aria-label="Arcade">🎮</a>
+        <button type="button" class="tool-icon-btn" id="cursorToggleBtn" title="Toggle Sparkle Cursor" aria-label="Sparkle Cursor">✨</button>
+        <a class="btn-tactile btn-peach" href="../index.html" style="padding: 8px 16px; font-size: 0.85rem;">← Main Site</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 50px 0 70px; max-width: 860px;">
+    <div style="margin-bottom: 24px;">
+      <a class="btn-tactile btn-mint" style="padding: 6px 14px; font-size: 0.82rem;" href="../index.html">
+        ← Back to Main Portfolio
+      </a>
+    </div>
+
+    <div>
+      <span class="sticker sticker-lemon sticker-tilt-left">★ DISCUSS A PROJECT</span>
+      <h1 style="font-size: clamp(2.5rem, 5.5vw, 4.4rem); margin: 12px 0 16px;">
+        Let's <em>Connect.</em>
+      </h1>
+    </div>
+
+    <div class="flavor-card card-peach" style="padding: 36px;">
+      <p style="font-size: 1.15rem; line-height: 1.7; color: var(--ink-muted); margin-bottom: 28px;">
+        Whether you have an internship opportunity, want to talk low-level Linux audio rendering, discuss dialogue speaker tracking experiments, or swap manga recommendations, I'm always eager to talk.
+      </p>
+
+      <div class="contact-actions-vertical">
+        <button type="button" class="contact-pill-btn" data-copy-email="aadityabagiballia@gmail.com">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="font-size: 1.5rem;">✉️</span>
+            <div style="text-align: left;">
+              <div style="font-size: 1rem;">aadityabagiballia@gmail.com</div>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-muted);">Click to copy email address to clipboard</div>
+            </div>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 0.82rem; background: var(--lemon); padding: 4px 12px; border-radius: 999px; border: 1.5px solid var(--ink);">COPY ★</span>
+        </button>
+
+        <a class="contact-pill-btn" href="https://github.com/Katori-bo" target="_blank" rel="noopener noreferrer">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="font-size: 1.5rem;">🐙</span>
+            <div style="text-align: left;">
+              <div style="font-size: 1rem;">GitHub: @Katori-bo</div>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-muted);">Check out repositories &amp; open source code</div>
+            </div>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 0.82rem;">VISIT ↗</span>
+        </a>
+
+        <div class="contact-pill-btn" style="cursor: default; background: var(--bg-card-white);">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="font-size: 1.5rem;">📍</span>
+            <div style="text-align: left;">
+              <div style="font-size: 1rem;">Bhubaneswar, Odisha, India</div>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-muted);">Timezone: Indian Standard Time (UTC+5:30)</div>
+            </div>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 0.82rem; background: var(--mint); padding: 4px 12px; border-radius: 999px; border: 1.5px solid var(--ink);">ONLINE</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 36px; padding-top: 24px; border-top: 2px dashed var(--ink);">
+        <a class="btn-tactile btn-mint" href="../index.html">← Return to Main Portfolio</a>
+      </div>
     </div>
   </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-muted);">
+        © <span data-current-year>2026</span> Aditya Tiwari · Built with passion and craft.
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>

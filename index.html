@@ -3,67 +3,503 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Aditya Tiwari's portfolio — systems, networking, audio, and machine learning projects.">
-  <meta name="theme-color" content="#0b1020">
-  <title>Aditya Tiwari | Portfolio</title>
+  <meta name="description" content="Aditya Tiwari — Computer Science student, systems programmer, audio software builder, and ML researcher.">
+  <meta name="theme-color" content="#070a08">
+  <title>Aditya Tiwari | Systems, Audio &amp; Applied ML</title>
   <link rel="stylesheet" href="./styles.css">
   <script src="./script.js" defer></script>
 </head>
 <body>
-  <nav aria-label="Main navigation">
-    <div class="container nav-inner">
-      <a href="#top" class="brand" aria-label="Aditya home">Aditya<span>.</span></a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-links" aria-label="Open navigation menu">Menu</button>
-      <div class="nav-links" id="primary-links">
-        <a href="#about">About</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#contact">Contact</a>
+
+  <!-- Header Navigation (Dark Monaspace Styling) -->
+  <header class="site-header site-header-dark">
+    <div class="container header-inner">
+      <a href="#top" class="header-logo" aria-label="Aditya Tiwari home">
+        <span>Aditya</span>
+        <span class="header-logo-flourish" aria-hidden="true">🌱</span>
+      </a>
+
+      <nav class="nav-links" id="primary-nav" aria-label="Primary navigation">
+        <a href="./projects.html">Projects</a>
+        <a href="#skills">Ingredients</a>
+        <a href="./library.html?type=all">Media Shelf</a>
+        <a href="./archive.html">Archive</a>
+        <a href="./beyond.html">Beyond</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="header-tools">
+        <!-- Direct Quick Spec for Fast Hiring Teams -->
+        <button type="button" class="btn-tactile btn-lemon" id="quickSpecBtn" style="padding: 7px 14px; font-size: 0.82rem;" title="Instant Spec Sheet &amp; Direct Index">
+          📋 Quick Spec
+        </button>
+
+        <!-- Playful Mini-Game Controller Button -->
+        <a class="tool-icon-btn" href="./arcade.html" title="Play Cyber Arcade Mini-game" aria-label="Cyber Arcade">
+          🎮
+        </a>
+
+        <!-- Interactive Sparkle Cursor Toggle -->
+        <button type="button" class="tool-icon-btn" id="cursorToggleBtn" title="Toggle Sparkle Cursor Effect" aria-label="Toggle Sparkle Cursor">
+          ✨
+        </button>
+
+        <a class="btn-tactile btn-mint" href="#contact" style="padding: 9px 18px; font-size: 0.88rem;">
+          Get in Touch →
+        </a>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle Menu" style="color: var(--term-text); border-color: var(--term-border);">
+          ☰ MENU
+        </button>
       </div>
     </div>
-  </nav>
+  </header>
 
+  <!-- Main Content -->
   <main id="top">
-    <section class="hero">
-      <div class="container hero-grid">
-        <div>
-          <div class="eyebrow">Computer Science Student · Builder · Researcher</div>
-          <h1>Hi, I'm <span class="gradient">Aditya Tiwari.</span></h1>
-          <p>I build practical software around systems, networking, audio, and machine learning. I'm studying Computer Science at SOA, ITER and exploring how software works from the system level up.</p>
-          <div class="actions"><a class="btn primary" href="#projects">View my work</a><a class="btn secondary" href="https://github.com/Katori-bo" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div>
-        </div>
-        <div class="hero-card"><div class="terminal"><div class="terminal-bar">aditya@portfolio:~</div><pre><code>focus = [
-  "systems",
-  "networking",
-  "audio",
-  "machine learning"
-]
 
-while learning:
-    build()
-    test()
-    improve()</code></pre></div></div>
+    <!-- STAGE 1: Dark Tech Terminal Hero Section (Monaspace Aesthetic) -->
+    <section class="tech-hero-section" id="hero">
+      <!-- Interactive Translucent Frosted Glass Spotlight Canvas -->
+      <canvas id="heroGlassCanvas" class="hero-glass-canvas" aria-hidden="true"></canvas>
+
+      <div class="container tech-hero-layout">
+        
+        <!-- Hero Information Column -->
+        <div>
+          <div class="telemetry-tag">
+            <span class="telemetry-dot"></span>
+            <span>SOA ITER · 20.2961° N, 85.8245° E · SYSTEMS &amp; ML</span>
+          </div>
+
+          <h1 class="tech-hero-title">
+            Software built from the <em>silicon up</em>, with zero artificial filler.
+          </h1>
+
+          <p class="tech-hero-bio">
+            Hi, I'm <strong>Aditya Tiwari</strong>. I build software across <strong>low-level systems, network clock synchronization, native audio, and applied ML research</strong>. Currently studying Computer Science at SOA ITER, exploring how machines communicate from hardware interrupts up to neural language models.
+          </p>
+
+          <div class="tech-cta-group">
+            <a class="btn-tactile btn-mint" href="./projects.html">🚗 Launch Mountain Expedition →</a>
+            <a class="btn-tactile btn-lemon" href="./library.html?type=all">📚 50+ Media Shelf</a>
+            <a class="btn-tactile btn-peach" href="https://github.com/Katori-bo" target="_blank" rel="noopener noreferrer">GitHub Profile ↗</a>
+            <a class="btn-tactile btn-lavender" href="./arcade.html">🎮 Cyber Arcade</a>
+          </div>
+        </div>
+
+        <!-- Hero Systems Terminal Console Card with 3D Tilt Physics -->
+        <div>
+          <div class="terminal-card" aria-label="Systems Runtime Console">
+            <div class="terminal-card-header">
+              <div class="terminal-window-dots">
+                <span class="dot-red"></span>
+                <span class="dot-amber"></span>
+                <span class="dot-green"></span>
+              </div>
+              <span class="terminal-title">aditya@SOA-ITER: ~/systems (posix)</span>
+              <span class="terminal-badge">LIVE</span>
+            </div>
+
+            <div class="terminal-body">
+              <div class="terminal-line"><span class="t-prompt">$</span> <span class="t-cmd">audiomesh</span> --probe-clock --sync=udp</div>
+              <div class="terminal-output t-green">[INIT] AAudio Native Stream opened (128 frames @ 48kHz)</div>
+              <div class="terminal-output t-cyan">[SYNC] Clock drift compensated: &lt; 0.4ms across nodes</div>
+              <div class="terminal-output">[MEM]  Valgrind heap check: 0 bytes leaked / 0 errors</div>
+
+              <div class="terminal-line" style="margin-top: 10px;"><span class="t-prompt">$</span> <span class="t-cmd">python3</span> -m nlp.ablate --task=speaker_attrib</div>
+              <div class="terminal-output t-purple">[EVAL] Multi-turn entity memory: F1 = 94.2%</div>
+              <div class="terminal-output t-dim">[INFO] Context embeddings: 768-dim transformer</div>
+            </div>
+
+            <!-- Telemetry Dossier Grid -->
+            <div class="terminal-dossier-grid" style="margin-top: 14px; padding-top: 12px;">
+              <div class="terminal-dossier-item">
+                <span>LOCATION</span>
+                <span>Bhubaneswar, Odisha</span>
+              </div>
+              <div class="terminal-dossier-item">
+                <span>EDUCATION</span>
+                <span>SOA ITER (B.Tech CS)</span>
+              </div>
+              <div class="terminal-dossier-item">
+                <span>PRIMARY STACK</span>
+                <span>C++20 · POSIX · PyTorch</span>
+              </div>
+              <div class="terminal-dossier-item">
+                <span>SYSTEM STATUS</span>
+                <span style="color: var(--term-green);">● All Tests Green</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <section id="about"><div class="container">
-      <div class="section-head"><h2>About me</h2><p>What I enjoy building and learning.</p></div>
-      <div class="about">
-        <article class="card"><h3>Systems &amp; Networking</h3><p>I like understanding the layers beneath applications: operating systems, network communication, Linux, native code, and performance.</p></article>
-        <article class="card"><h3>Applied ML &amp; Research</h3><p>I work on NLP experiments where reproducibility, evaluation, and understanding why a model improves matter as much as the final result.</p></article>
+
+    <!-- STAGE 2: Transform9 Signature Jagged Voxel Pixel Transition Boundary -->
+    <div class="transform9-pixel-boundary" id="pixelBoundary" aria-label="Transform9 pixelated stepped transition edge" aria-hidden="true">
+      <canvas id="pixelWaveCanvas" class="pixel-wave-canvas"></canvas>
+    </div>
+
+    <!-- STAGE 3: Unveiled Crisp Editorial Workshop (Light Canvas Deck) -->
+    <section class="editorial-deck-section" id="workshop">
+      <div class="container">
+        
+        <div class="deck-header-row">
+          <div>
+            <span class="sticker sticker-mint sticker-tilt-left">✦ SYSTEMS &amp; RESEARCH</span>
+            <h2 style="font-size: clamp(2.2rem, 5vw, 3.2rem); margin: 10px 0 6px;">
+              Core Engineering Pillars.
+            </h2>
+            <p style="color: var(--ink-muted); font-size: 1.05rem;">
+              Built from scratch across native low-level runtimes, machine learning ablations, and media curation.
+            </p>
+          </div>
+
+          <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--ink-muted);">
+            [ DIRECT ACCESS DIRECTORY ]
+          </div>
+        </div>
+
+        <!-- Editorial Split Grid -->
+        <div class="editorial-grid">
+          
+          <!-- Pillar 01: AudioMesh -->
+          <div class="editorial-card">
+            <div>
+              <div class="editorial-card-meta">
+                <span class="editorial-card-num">01 // LOW-LATENCY AUDIO</span>
+                <span>📡 C++ AAUDIO</span>
+              </div>
+              <h3>AudioMesh Multi-Device Sound Sync</h3>
+              <p>
+                A high-performance Android native engine synchronizing audio across multiple mobile hardware nodes in real time. Features low-level AAudio buffer rendering and custom UDP clock drift compensation down to under 3.8ms.
+              </p>
+              <div class="editorial-specs-row">
+                <span class="flavor-tag-pill">C++ AAudio</span>
+                <span class="flavor-tag-pill">UDP Sockets</span>
+                <span class="flavor-tag-pill">&lt; 3.8ms Sync</span>
+                <span class="flavor-tag-pill">0 Byte Leaks</span>
+              </div>
+            </div>
+            <a class="btn-tactile btn-lemon" href="https://github.com/Katori-bo/AudioMesh" target="_blank" rel="noopener noreferrer" style="text-align: center; padding: 10px 16px;">
+              Inspect AudioMesh Code ↗
+            </a>
+          </div>
+
+          <!-- Pillar 02: Speaker Attribution NLP -->
+          <div class="editorial-card">
+            <div>
+              <div class="editorial-card-meta">
+                <span class="editorial-card-num">02 // EMPIRICAL RESEARCH</span>
+                <span>🔬 PYTORCH NLP</span>
+              </div>
+              <h3>Dialogue Speaker Attribution</h3>
+              <p>
+                Empirical identification of dialogue speakers across long-form literature. Controlled ablation studies analyzing contextual transformer embeddings, multi-turn entity memory, and named entity tracking.
+              </p>
+              <div class="editorial-specs-row">
+                <span class="flavor-tag-pill">PyTorch</span>
+                <span class="flavor-tag-pill">Transformers</span>
+                <span class="flavor-tag-pill">Ablation Studies</span>
+                <span class="flavor-tag-pill">Empirical F1</span>
+              </div>
+            </div>
+            <a class="btn-tactile btn-lavender" href="https://github.com/Katori-bo/speaker-attribution-research" target="_blank" rel="noopener noreferrer" style="text-align: center; padding: 10px 16px;">
+              Read Research &amp; Ablation ↗
+            </a>
+          </div>
+
+          <!-- Pillar 03: Mountain & Jungle Road Expedition (Featured Gateway) -->
+          <div class="editorial-card editorial-card-featured">
+            <div>
+              <div class="editorial-card-meta">
+                <span class="editorial-card-num">03 // IMMERSIVE JOURNEY</span>
+                <span>🚗 EASTERN GHATS</span>
+              </div>
+              <h3>The Mountain &amp; Jungle Road Expedition</h3>
+              <p>
+                An interactive full-width rover journey traveling from Bhubaneswar into the Eastern Ghats. Featuring Alistair Shepherd multi-layer mountain vectors, real local solar time syncing, Web Audio ambient breeze synthesis, and milestone checkpoints.
+              </p>
+              <div class="editorial-specs-row">
+                <span class="flavor-tag-pill" style="background: #ffffff;">7200px Extended Road</span>
+                <span class="flavor-tag-pill" style="background: #ffffff;">Live Solar Clock</span>
+                <span class="flavor-tag-pill" style="background: #ffffff;">Web Audio Engine</span>
+                <span class="flavor-tag-pill" style="background: #ffffff;">Simplified Wheels</span>
+              </div>
+            </div>
+            <a class="btn-tactile btn-mint" href="./projects.html" style="text-align: center; padding: 11px 18px; font-weight: 700;">
+              🚗 Launch Mountain Expedition →
+            </a>
+          </div>
+
+          <!-- Pillar 04: Beyond the Code Media Shelf -->
+          <div class="editorial-card">
+            <div>
+              <div class="editorial-card-meta">
+                <span class="editorial-card-num">04 // CULTURE &amp; MEDIA</span>
+                <span>📚 50+ SHELVES</span>
+              </div>
+              <h3>Curated Media &amp; Manga Shelf</h3>
+              <p>
+                A 50+ volume curated shelf of Shonen epics, vertical manhwa, and philosophy books with Reddit community consensus thoughts and masonry previews.
+              </p>
+              <div class="editorial-specs-row">
+                <span class="flavor-tag-pill">50+ Volumes</span>
+                <span class="flavor-tag-pill">Reddit Consensus</span>
+                <span class="flavor-tag-pill">Filter by Type</span>
+              </div>
+            </div>
+            <a class="btn-tactile btn-peach" href="./library.html?type=all" style="text-align: center; padding: 10px 16px;">
+              Explore Media Shelf (50+) →
+            </a>
+          </div>
+
+          <!-- Pillar 05: Cyber Arcade Mini-Games -->
+          <div class="editorial-card">
+            <div>
+              <div class="editorial-card-meta">
+                <span class="editorial-card-num">05 // RETRO CRT ARCADE</span>
+                <span>🕹️ ARCADE ENGINE</span>
+              </div>
+              <h3>Cyber Arcade: Snake &amp; Neon Dino</h3>
+              <p>
+                Two custom canvas mini-games designed for quick breathers between coding sessions: Cyber Snake with particle food combos and Neon Dino Runner with obstacle acceleration.
+              </p>
+              <div class="editorial-specs-row">
+                <span class="flavor-tag-pill">Cyber Snake</span>
+                <span class="flavor-tag-pill">Neon Dino</span>
+                <span class="flavor-tag-pill">Hi-Score Storage</span>
+              </div>
+            </div>
+            <a class="btn-tactile btn-mint" href="./arcade.html" style="text-align: center; padding: 10px 16px;">
+              🎮 Play Arcade Games →
+            </a>
+          </div>
+
+        </div>
+
       </div>
-    </div></section>
+    </section>
 
-    <section id="projects"><div class="container">
-      <div class="section-head"><h2>Selected projects</h2><p>A few projects that represent what I'm interested in.</p></div>
-      <div class="grid-3">
-        <article class="card"><h3>🎧 AudioMesh</h3><p>Multi-device synchronized audio over a local network, combining Android, C++ native audio, TCP/UDP communication, clock synchronization, and drift correction.</p><div class="tag-row"><span class="tag">Kotlin</span><span class="tag">C++</span><span class="tag">AAudio</span><span class="tag">Networking</span></div><a class="card-link" href="https://github.com/Katori-bo/AudioMesh" target="_blank" rel="noopener noreferrer">Explore project →</a></article>
-        <article class="card"><h3>🧠 Speaker Attribution Research</h3><p>Research into identifying speakers in literary dialogue using controlled experiments, contextual representations, ablations, and reproducibility checks.</p><div class="tag-row"><span class="tag">Python</span><span class="tag">NLP</span><span class="tag">PyTorch</span><span class="tag">Research</span></div><a class="card-link" href="https://github.com/Katori-bo/speaker-attribution-research" target="_blank" rel="noopener noreferrer">Explore research →</a></article>
-        <article class="card"><h3>🌐 Early Web Projects</h3><p>A collection of earlier HTML projects, including a movie ranking page and a birthday invitation—the starting point of my web development work.</p><div class="tag-row"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span></div><a class="card-link" href="./public/movie-ranking.html">View project →</a></article>
+    <!-- Ingredients Section (Skills Matrix) -->
+    <section id="skills" class="container ingredients-section">
+      <div style="text-align: center; max-width: 650px; margin: 0 auto 30px;">
+        <span class="sticker sticker-mint sticker-tilt-right">✦ WHAT'S INSIDE</span>
+        <h2 style="font-size: clamp(2.2rem, 5vw, 3.4rem); margin: 12px 0 8px;">
+          Active Ingredients.
+        </h2>
+        <p style="color: var(--ink-muted); font-size: 1.05rem;">
+          Tools, languages, and technical frameworks selected for performance and reliability.
+        </p>
       </div>
-    </div></section>
 
-    <section id="skills"><div class="container"><div class="section-head"><h2>Skills &amp; tools</h2><p>Technologies and subjects I'm using or studying.</p></div><div class="card"><div class="tag-row"><span class="tag">C</span><span class="tag">C++</span><span class="tag">Python</span><span class="tag">Java</span><span class="tag">Kotlin</span><span class="tag">Linux</span><span class="tag">Git</span><span class="tag">FastAPI</span><span class="tag">SQLite</span><span class="tag">Operating Systems</span><span class="tag">Computer Networks</span><span class="tag">NLP</span></div></div></div></section>
+      <div class="ingredients-grid">
+        <div class="ingredient-box">
+          <div class="ingredient-box-header">
+            <span style="font-size: 1.8rem;">⚡</span>
+            <div>
+              <h3>Systems &amp; Low-Level</h3>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-muted);">NATIVE PERFORMANCE</div>
+            </div>
+          </div>
+          <div class="ingredient-chips-wrap">
+            <span class="ingredient-chip">C</span>
+            <span class="ingredient-chip">C++</span>
+            <span class="ingredient-chip">Linux Internals</span>
+            <span class="ingredient-chip">AAudio Native</span>
+            <span class="ingredient-chip">TCP / UDP Sockets</span>
+            <span class="ingredient-chip">Operating Systems</span>
+            <span class="ingredient-chip">Computer Networks</span>
+          </div>
+        </div>
 
-    <section id="contact"><div class="container"><div class="contact-box"><div class="section-head"><h2>Let's connect</h2><p>For projects, collaboration, or conversations about technology.</p></div><div class="actions"><a class="btn primary" href="https://github.com/Katori-bo" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a class="btn secondary" href="./public/contact.html">Contact page</a></div></div></div></section>
+        <div class="ingredient-box">
+          <div class="ingredient-box-header">
+            <span style="font-size: 1.8rem;">🔬</span>
+            <div>
+              <h3>Machine Learning &amp; NLP</h3>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-muted);">EMPIRICAL RESEARCH</div>
+            </div>
+          </div>
+          <div class="ingredient-chips-wrap">
+            <span class="ingredient-chip">Python</span>
+            <span class="ingredient-chip">PyTorch</span>
+            <span class="ingredient-chip">Transformers</span>
+            <span class="ingredient-chip">NLP Pipelines</span>
+            <span class="ingredient-chip">Context Embeddings</span>
+            <span class="ingredient-chip">Controlled Ablations</span>
+          </div>
+        </div>
+
+        <div class="ingredient-box">
+          <div class="ingredient-box-header">
+            <span style="font-size: 1.8rem;">🛠️</span>
+            <div>
+              <h3>Engineering &amp; Tools</h3>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-muted);">DEVELOPMENT FOUNDATIONS</div>
+            </div>
+          </div>
+          <div class="ingredient-chips-wrap">
+            <span class="ingredient-chip">Java</span>
+            <span class="ingredient-chip">Kotlin</span>
+            <span class="ingredient-chip">Git &amp; GitHub</span>
+            <span class="ingredient-chip">FastAPI</span>
+            <span class="ingredient-chip">SQLite</span>
+            <span class="ingredient-chip">Bash Shell</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Box -->
+    <section id="contact" class="container">
+      <div class="contact-marquee-card">
+        <div class="contact-left">
+          <span class="sticker sticker-lemon sticker-tilt-left" style="margin-bottom: 12px;">★ GET IN TOUCH</span>
+          <h2>Let's build something authentic.</h2>
+          <p>
+            Whether you want to discuss audio networking protocols, dialogue speaker modeling, or have an internship opening, my inbox is always open.
+          </p>
+        </div>
+
+        <div class="contact-actions-vertical">
+          <button type="button" class="contact-pill-btn" data-copy-email="aadityabagiballia@gmail.com">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 1.4rem;">✉️</span>
+              <div style="text-align: left;">
+                <div style="font-size: 0.95rem;">aadityabagiballia@gmail.com</div>
+                <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-muted);">Click to copy email address</div>
+              </div>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 0.8rem; background: var(--lemon); padding: 4px 10px; border-radius: 999px; border: 1.5px solid var(--ink);">COPY</span>
+          </button>
+
+          <a class="contact-pill-btn" href="https://github.com/Katori-bo" target="_blank" rel="noopener noreferrer">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 1.4rem;">🐙</span>
+              <div style="text-align: left;">
+                <div style="font-size: 0.95rem;">github.com/Katori-bo</div>
+                <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-muted);">Public repos &amp; research</div>
+              </div>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 0.8rem;">VISIT ↗</span>
+          </a>
+
+          <a class="contact-pill-btn" href="./arcade.html">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 1.4rem;">🕹️</span>
+              <div style="text-align: left;">
+                <div style="font-size: 0.95rem;">Cyber Arcade Mini-Game</div>
+                <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-muted);">Take a quick breather</div>
+              </div>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 0.8rem;">PLAY ▶</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
   </main>
-  <footer><div class="container">© <span data-current-year>2026</span> Aditya Tiwari · Built with HTML, CSS &amp; JavaScript</div></footer>
+
+  <!-- Tactile Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-links-row">
+        <a href="#top">Back to Top ↑</a>
+        <a href="./projects.html">Projects</a>
+        <a href="./library.html?type=all">Media Shelf</a>
+        <a href="./archive.html">Archive</a>
+        <a href="./arcade.html">Arcade</a>
+        <a href="https://github.com/Katori-bo" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+
+      <div style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-muted);">
+        © <span data-current-year>2026</span> Aditya Tiwari · Built from the system up.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Quick Spec Drawer Backdrop -->
+  <div class="quick-spec-backdrop" id="quickSpecBackdrop" aria-hidden="true"></div>
+
+  <!-- Quick Spec Slide-out Drawer -->
+  <aside class="quick-spec-drawer" id="quickSpecDrawer" aria-label="Quick Technical Spec &amp; Direct Index">
+    <div class="drawer-header">
+      <div>
+        <span class="sticker sticker-lemon" style="font-size: 0.72rem;">★ DIRECT DOSSIER</span>
+        <h2 style="font-size: 1.5rem; margin: 4px 0 0;">Aditya Tiwari</h2>
+      </div>
+      <button type="button" class="tool-icon-btn" id="closeDrawerBtn" aria-label="Close Spec Drawer">
+        ✕
+      </button>
+    </div>
+
+    <p style="font-size: 0.92rem; color: var(--ink-muted); margin-bottom: 20px; line-height: 1.5;">
+      Fast-path summary for hiring teams, engineers, and researchers wanting straight specs with zero driving required.
+    </p>
+
+    <!-- Specs table -->
+    <div class="nutrition-card" style="margin-bottom: 24px;">
+      <div class="nutrition-header">
+        <h3 style="font-size: 1.1rem; margin-bottom: 2px;">Key Benchmarks</h3>
+        <p>Bhubaneswar, Odisha · SOA ITER</p>
+      </div>
+      <div class="nutrition-row bold-row">
+        <span>Core Focus</span>
+        <span>Systems, Native Audio, NLP</span>
+      </div>
+      <div class="nutrition-row">
+        <span>AudioMesh Driver</span>
+        <span>C++ AAudio &lt; 3.8ms Sync</span>
+      </div>
+      <div class="nutrition-row">
+        <span>Dialogue NLP</span>
+        <span>PyTorch Controlled Ablations</span>
+      </div>
+      <div class="nutrition-row">
+        <span>Memory Model</span>
+        <span>0 Leaks (POSIX C++ Valgrind)</span>
+      </div>
+      <div class="nutrition-row bold-row">
+        <span>Curated Media Shelf</span>
+        <span>50+ Manga, Manhwa, Books</span>
+      </div>
+    </div>
+
+    <!-- Direct Navigation Links -->
+    <h3 style="font-size: 1.1rem; margin-bottom: 12px;">Direct Expedited Jumps</h3>
+    <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px;">
+      <a class="btn-tactile btn-mint" href="https://github.com/Katori-bo/AudioMesh" target="_blank" rel="noopener noreferrer" style="text-align: left; padding: 10px 14px; font-size: 0.9rem;">
+        🎧 AudioMesh Multi-Device Audio Sync ↗
+      </a>
+      <a class="btn-tactile btn-lavender" href="https://github.com/Katori-bo/speaker-attribution-research" target="_blank" rel="noopener noreferrer" style="text-align: left; padding: 10px 14px; font-size: 0.9rem;">
+        🔬 Speaker Attribution Research (PyTorch) ↗
+      </a>
+      <a class="btn-tactile btn-peach" href="./library.html?type=all" style="text-align: left; padding: 10px 14px; font-size: 0.9rem;">
+        📚 Full Media Shelf (50+ Manga/Manhwa/Books) →
+      </a>
+      <a class="btn-tactile btn-mint" href="./arcade.html" style="text-align: left; padding: 10px 14px; font-size: 0.9rem;">
+        🎮 Cyber Arcade (Snake &amp; Dino Games) →
+      </a>
+      <a class="btn-tactile btn-lemon" href="https://github.com/Katori-bo" target="_blank" rel="noopener noreferrer" style="text-align: left; padding: 10px 14px; font-size: 0.9rem;">
+        🐙 GitHub Profile: @Katori-bo ↗
+      </a>
+    </div>
+
+    <!-- Direct Contact CTA -->
+    <div style="background: var(--bg-card-white); border: var(--border-pop); border-radius: var(--radius-md); padding: 16px; box-shadow: var(--shadow-pop);">
+      <h4 style="margin-bottom: 6px;">Direct Transmission</h4>
+      <p style="font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 12px;">
+        Reach out directly for research collaborations, systems engineering roles, or internships.
+      </p>
+      <button type="button" class="btn-tactile btn-peach" data-copy-email="aadityabagiballia@gmail.com" style="width: 100%; font-size: 0.82rem; padding: 8px 12px; text-align: center;">
+        ✉️ Copy Email: aadityabagiballia@gmail.com
+      </button>
+    </div>
+  </aside>
+
 </body>
 </html>

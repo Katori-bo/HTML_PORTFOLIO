@@ -1,3 +1,123 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080a10"><title>My Shelf | Aditya</title><link rel="stylesheet" href="./styles.css"><script src="./script.js" defer></script><style>
-.library-main{padding-top:76px;padding-bottom:90px}.library-main>.eyebrow{color:#c5a8ff;border-color:#7555aa;background:#251a39}.library-main h1{font-size:clamp(2.4rem,6vw,4.5rem);letter-spacing:-.05em}.library-controls{display:flex;gap:12px;margin:30px 0 12px}.library-controls input{width:min(100%,520px);padding:14px 16px;background:#10131c;border:1px solid #343849;border-radius:12px;color:#f5f5fa;font:inherit}.library-controls input:focus{outline:2px solid #a78bfa;outline-offset:2px}.title-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0 34px}.title-card{position:relative;min-height:125px;padding:22px;border:1px solid #303344;border-radius:16px;background:linear-gradient(145deg,#171a28,#10121b);overflow:hidden;transition:transform .2s,border-color .2s}.title-card:before{content:"";position:absolute;width:100px;height:100px;right:-45px;top:-45px;border-radius:50%;background:radial-gradient(circle,#7357b833,transparent 70%)}.title-card:hover{transform:translateY(-3px);border-color:#8b75c9}.title-number{font:700 .75rem ui-monospace,monospace;color:#a78bfa}.title-card h2{position:relative;margin:12px 0 14px;font-size:1rem;line-height:1.45}.title-type{display:inline-block;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#aab2c7}.library-main .small{font-size:.82rem;margin-bottom:20px}.shelf-back{display:inline-block;margin:0 0 24px;color:#c4b5fd}@media(max-width:760px){.title-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:480px){.title-grid{grid-template-columns:1fr}.library-controls{margin-top:22px}}
-</style></head><body><nav><div class="container nav-inner"><a class="brand" href="./index.html">Aditya<span>.</span></a><div class="nav-links"><a href="./archive.html">Archive</a><a href="./arcade.html">Arcade</a><a href="./index.html">Portfolio</a></div></div></nav><main class="container library-main"><a class="shelf-back" href="./archive.html">← Back to archive</a><p class="eyebrow">PERSONAL ARCHIVE</p><h1 id="library-title">My Shelf</h1><p class="lead" id="library-description">A personal list of stories and books.</p><div class="library-controls"><input id="title-search" type="search" placeholder="Search titles…" aria-label="Search titles"><select id="genre-filter" aria-label="Filter by category"><option value="all">All titles</option><option value="action">Action</option><option value="fantasy">Fantasy</option><option value="comedy">Comedy</option><option value="drama">Drama</option><option value="other">Other</option></select></div><p id="result-count" class="muted" aria-live="polite"></p><div id="title-grid" class="title-grid"></div><p class="muted small">Personal collection, not a ranking. Your lists can be edited in <code>script.js</code>.</p><a class="btn secondary" href="./archive.html">← Back to archive</a></main><footer><div class="container">© <span data-current-year>2026</span> Aditya Tiwari</div></footer></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Aditya Tiwari's curated media shelf — Manga, Manhwa, Anime, and Books.">
+  <meta name="theme-color" content="#faf6ee">
+  <title>Media Shelf | Aditya Tiwari</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./script.js" defer></script>
+</head>
+<body class="theme-bookshop">
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="./index.html" class="header-logo" aria-label="Aditya Tiwari home">
+        <span>Aditya</span>
+        <span class="header-logo-flourish" aria-hidden="true">🌱</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="./index.html">Home</a>
+        <a href="./projects.html">Projects</a>
+        <a href="./archive.html">Archive Hub</a>
+        <a href="./arcade.html">Arcade</a>
+        <a href="./beyond.html">Beyond</a>
+      </nav>
+
+      <div class="header-tools">
+        <a class="tool-icon-btn" href="./arcade.html" title="Play Arcade" aria-label="Arcade">🎮</a>
+        <button type="button" class="tool-icon-btn" id="cursorToggleBtn" title="Toggle Sparkle Cursor" aria-label="Sparkle Cursor">✨</button>
+        <a class="btn-tactile btn-peach" href="./index.html" style="padding: 8px 16px; font-size: 0.85rem;">← Main Site</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Fixed Side Floating Stickers (Visible in Manga, Manhwa & Anime; Hidden in Books; Spans Full Viewport Height) -->
+  <aside class="shelf-flank-rail shelf-flank-left" id="shelfFlankLeft" aria-hidden="true">
+    <div class="flank-sticker-item sticker-bob-1"><img src="./assets/images/short_pictures_on_side/cat.png" alt="Anime Cat Sticker" loading="lazy"></div>
+    <div class="flank-sticker-item sticker-bob-2"><img src="./assets/images/short_pictures_on_side/jjk.png" alt="JJK Sticker" loading="lazy"></div>
+    <div class="flank-sticker-item sticker-bob-3"><img src="./assets/images/short_pictures_on_side/shinchan.png" alt="Shinchan Sticker" loading="lazy"></div>
+    <div class="flank-sticker-item sticker-bob-4"><img src="./assets/images/short_pictures_on_side/dbz.png" alt="Dragon Ball Z Sticker" loading="lazy"></div>
+    <div class="flank-sticker-item sticker-bob-1"><img src="./assets/images/short_pictures_on_side/katana.png" alt="Katana Sticker" loading="lazy"></div>
+    <div class="flank-sticker-item sticker-bob-2"><img src="./assets/images/short_pictures_on_side/studio_ghibli.png" alt="Studio Ghibli Sticker" loading="lazy"></div>
+    <div class="flank-sticker-item sticker-bob-3"><img src="./assets/images/short_pictures_on_side/game_boyu.png" alt="Game Boy Sticker" loading="lazy"></div>
+    <div class="flank-sticker-item sticker-bob-4"><img src="./assets/images/short_pictures_on_side/skeleton_cool.png" alt="Skeleton Sticker" loading="lazy"></div>
+  </aside>
+
+  <aside class="shelf-flank-rail shelf-flank-right" id="shelfFlankRight" aria-hidden="true">
+    <div class="flank-sticker-item sticker-bob-3"><img src="./assets/images/short_pictures_on_side/fox_girl.png" alt="Fox Girl Sticker" loading="lazy"></div>
+    <div class="flank-sticker-item sticker-bob-4"><img src="./assets/images/short_pictures_on_side/moharaga_jjk.png" alt="Mahoraga Sticker" loading="lazy"></div>
+    <div class="flank-sticker-item sticker-bob-1"><img src="./assets/images/short_pictures_on_side/oshi_no_ko.png" alt="Oshi no Ko Sticker" loading="lazy"></div>
+    <div class="flank-sticker-item sticker-bob-2"><img src="./assets/images/short_pictures_on_side/neon_genesis.png" alt="Neon Genesis Sticker" loading="lazy"></div>
+    <div class="flank-sticker-item sticker-bob-3"><img src="./assets/images/short_pictures_on_side/sony_ps.png" alt="Retro Console Sticker" loading="lazy"></div>
+    <div class="flank-sticker-item sticker-bob-4"><img src="./assets/images/short_pictures_on_side/studio_ghibli_tororo.png" alt="Totoro Sticker" loading="lazy"></div>
+    <div class="flank-sticker-item sticker-bob-1"><img src="./assets/images/short_pictures_on_side/cat.png" alt="Anime Cat Sticker" loading="lazy"></div>
+    <div class="flank-sticker-item sticker-bob-2"><img src="./assets/images/short_pictures_on_side/dbz.png" alt="Dragon Ball Z Sticker" loading="lazy"></div>
+  </aside>
+
+  <!-- Main Shelf Container -->
+  <main class="container shelf-container">
+    <div style="margin-bottom: 24px;">
+        <a class="btn-tactile btn-mint" style="padding: 6px 14px; font-size: 0.82rem;" href="./archive.html">
+          ← Back to Archive Hub
+        </a>
+      </div>
+
+      <div>
+        <span class="sticker sticker-peach sticker-tilt-left">★ PERSONAL CANTEEN</span>
+        <h1 id="shelf-title" style="font-size: clamp(2.4rem, 5.5vw, 4.2rem); margin: 12px 0 8px;">
+          The Complete Shelf
+        </h1>
+        <p id="shelf-description" style="color: var(--ink-muted); font-size: 1.1rem; max-width: 720px;">
+          A visual collection of Japanese manga, Korean webtoons, animated epics, and timeless books that fuel imagination.
+        </p>
+      </div>
+
+      <!-- Filter Tabs & Search Controls -->
+      <div class="shelf-controls-wrap">
+        <div class="shelf-filter-tabs">
+          <button type="button" class="shelf-filter-btn active" data-type="all">All Titles</button>
+          <button type="button" class="shelf-filter-btn" data-type="manga">Manga</button>
+          <button type="button" class="shelf-filter-btn" data-type="manhwa">Manhwa</button>
+          <button type="button" class="shelf-filter-btn" data-type="anime">Anime</button>
+          <button type="button" class="shelf-filter-btn" data-type="books">Books</button>
+        </div>
+
+        <input 
+          id="shelf-search" 
+          class="tactile-search-input" 
+          type="search" 
+          placeholder="🔍 Search titles (e.g., Solo Leveling, Chainsaw Man, Deep Work)..." 
+          aria-label="Search media titles">
+        
+        <div id="shelf-count" style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--ink-muted);">
+          Loading collection...
+        </div>
+      </div>
+
+      <!-- Collectible Trading Card Poster Grid -->
+      <div id="poster-grid" class="collectible-poster-grid" aria-label="Collectible Poster Grid">
+        <!-- Injected dynamically by script.js with covers from assets/images/ -->
+      </div>
+    </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-links-row">
+        <a href="./index.html">Main Portfolio</a>
+        <a href="./archive.html">Archive Categories</a>
+        <a href="./arcade.html">Arcade Game</a>
+        <a href="./beyond.html">Beyond the Code</a>
+      </div>
+      <div style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--ink-muted);">
+        © <span data-current-year>2026</span> Aditya Tiwari · Stories and craftsmanship.
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
