@@ -612,16 +612,51 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       hctx.globalAlpha = 1.0;
 
-      // 3. Central floating energy orb behind the frosted glass
-      const coreGrad = hctx.createRadialGradient(curX, curY, 0, curX, curY, radius * 0.7);
-      coreGrad.addColorStop(0.0, 'rgba(74, 222, 128, 0.40)');
-      coreGrad.addColorStop(0.3, 'rgba(56, 189, 248, 0.28)');
-      coreGrad.addColorStop(0.6, 'rgba(168, 85, 247, 0.18)');
-      coreGrad.addColorStop(1.0, 'rgba(9, 12, 10, 0)');
-      hctx.fillStyle = coreGrad;
-      hctx.beginPath();
-      hctx.arc(curX, curY, radius * 0.7, 0, Math.PI * 2);
-      hctx.fill();
+      // 3. Moving Glowing Square Core behind the frosted glass
+      const sqSize = gridSize - 4; // Crisp square tile matching grid geometry (46px)
+      const halfSq = sqSize / 2;
+
+      // A. Layered geometric square aura radiating outward
+      const auraSteps = [
+        { scale: 3.4, alpha: 0.10, color: '#4ade80' },
+        { scale: 2.3, alpha: 0.20, color: '#38bdf8' },
+        { scale: 1.5, alpha: 0.32, color: '#4ade80' }
+      ];
+      auraSteps.forEach((step) => {
+        const aSize = sqSize * step.scale;
+        hctx.save();
+        hctx.fillStyle = step.color;
+        hctx.globalAlpha = step.alpha;
+        hctx.shadowColor = step.color;
+        hctx.shadowBlur = 32;
+        hctx.fillRect(curX - aSize / 2, curY - aSize / 2, aSize, aSize);
+        hctx.restore();
+      });
+
+      // B. Primary moving glowing square tile
+      hctx.save();
+      hctx.globalAlpha = 0.95;
+      hctx.fillStyle = '#4ade80';
+      hctx.shadowColor = '#4ade80';
+      hctx.shadowBlur = 24;
+      hctx.fillRect(curX - halfSq, curY - halfSq, sqSize, sqSize);
+
+      // C. Luminous inner square frame
+      hctx.fillStyle = '#ffffff';
+      hctx.globalAlpha = 0.85;
+      hctx.fillRect(curX - halfSq + 4, curY - halfSq + 4, sqSize - 8, sqSize - 8);
+
+      // D. Inner neon core
+      hctx.fillStyle = '#22c55e';
+      hctx.globalAlpha = 0.95;
+      hctx.fillRect(curX - halfSq + 8, curY - halfSq + 8, sqSize - 16, sqSize - 16);
+
+      // E. Crisp high-contrast white border
+      hctx.strokeStyle = '#ffffff';
+      hctx.lineWidth = 1.5;
+      hctx.globalAlpha = 1.0;
+      hctx.strokeRect(curX - halfSq, curY - halfSq, sqSize, sqSize);
+      hctx.restore();
 
       requestAnimationFrame(renderHeroGrid);
     }
@@ -654,10 +689,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const rect = pixelBoundary.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      // Transition begins as boundary enters viewport bottom (rect.top <= vh)
-      // Transition completes as boundary passes towards center (rect.top <= vh * 0.25)
-      const startY = vh;
-      const endY = vh * 0.20;
+      // Extended scroll runway so the transition plays out for slightly longer
+      // Starts as boundary enters lower viewport, completes smoothly as user scrolls into workshop
+      const startY = vh * 1.05;
+      const endY = -rect.height * 0.25;
       const rawP = (startY - rect.top) / (startY - endY);
       targetProgress = Math.max(0, Math.min(1, rawP));
     }
@@ -726,10 +761,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderPixelWave() {
       waveTime += 0.02;
 
-      // Liquid organic lerp for scroll up and down: 0.12 ensures responsive, natural transition
-      const delta = (targetProgress - currentProgress) * 0.12;
+      // Smooth liquid organic lerp for scroll up and down: 0.09 for luxurious fluid travel
+      const delta = (targetProgress - currentProgress) * 0.09;
       currentProgress += delta;
-      if (Math.abs(targetProgress - currentProgress) < 0.0004) {
+      if (Math.abs(targetProgress - currentProgress) < 0.0003) {
         currentProgress = targetProgress;
       }
 
@@ -738,8 +773,9 @@ document.addEventListener('DOMContentLoaded', () => {
       pctx.fillRect(0, 0, pw, ph);
 
       // Base Y of the solid cream deck: rises when scrolling DOWN, retreats when scrolling UP
-      const targetBaseY = ph - blockSize * 1.2;
-      const hiddenBaseY = ph + blockSize * 1.5;
+      // Scaled for height: 640px to give stepped fringe ample vertical room
+      const targetBaseY = ph - blockSize * 2.2;
+      const hiddenBaseY = ph + blockSize * 2.4;
       const currentDeckY = hiddenBaseY - (hiddenBaseY - targetBaseY) * currentProgress;
 
       for (let c = 0; c < cols; c++) {
@@ -748,7 +784,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Column wave delay creates the sweeping cascading arc
         const colDelay = Math.sin((c / cols) * Math.PI) * 0.22 + (c / cols) * 0.14;
-        const colProgress = Math.max(0, Math.min(1, (currentProgress - colDelay * 0.32) / 0.68));
+        const colProgress = Math.max(0, Math.min(1, (currentProgress - colDelay * 0.30) / 0.70));
 
         // Subtle organic ripple along the fringe
         const ripple = Math.sin(waveTime + c * 0.6) * 3;
@@ -940,16 +976,51 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       actx.globalAlpha = 1.0;
 
-      // 3. Central floating energy orb behind the frosted glass
-      const coreGrad = actx.createRadialGradient(curX, curY, 0, curX, curY, radius * 0.7);
-      coreGrad.addColorStop(0.0, 'rgba(34, 197, 94, 0.40)');
-      coreGrad.addColorStop(0.3, 'rgba(56, 189, 248, 0.28)');
-      coreGrad.addColorStop(0.6, 'rgba(236, 72, 153, 0.18)');
-      coreGrad.addColorStop(1.0, 'rgba(6, 8, 14, 0)');
-      actx.fillStyle = coreGrad;
-      actx.beginPath();
-      actx.arc(curX, curY, radius * 0.7, 0, Math.PI * 2);
-      actx.fill();
+      // 3. Arcade Moving Glowing Square Core behind frosted glass
+      const sqSize = gridSize - 4; // Crisp square tile matching arcade grid (42px)
+      const halfSq = sqSize / 2;
+
+      // A. Layered geometric square aura radiating outward
+      const auraSteps = [
+        { scale: 3.4, alpha: 0.12, color: '#22c55e' },
+        { scale: 2.3, alpha: 0.22, color: '#38bdf8' },
+        { scale: 1.5, alpha: 0.35, color: '#facc15' }
+      ];
+      auraSteps.forEach((step) => {
+        const aSize = sqSize * step.scale;
+        actx.save();
+        actx.fillStyle = step.color;
+        actx.globalAlpha = step.alpha;
+        actx.shadowColor = step.color;
+        actx.shadowBlur = 32;
+        actx.fillRect(curX - aSize / 2, curY - aSize / 2, aSize, aSize);
+        actx.restore();
+      });
+
+      // B. Primary arcade moving glowing square tile
+      actx.save();
+      actx.globalAlpha = 0.95;
+      actx.fillStyle = '#22c55e'; // Arcade green
+      actx.shadowColor = '#22c55e';
+      actx.shadowBlur = 24;
+      actx.fillRect(curX - halfSq, curY - halfSq, sqSize, sqSize);
+
+      // C. Luminous inner square frame
+      actx.fillStyle = '#ffffff';
+      actx.globalAlpha = 0.88;
+      actx.fillRect(curX - halfSq + 4, curY - halfSq + 4, sqSize - 8, sqSize - 8);
+
+      // D. Inner cyber core
+      actx.fillStyle = '#38bdf8'; // Cyber cyan
+      actx.globalAlpha = 0.95;
+      actx.fillRect(curX - halfSq + 8, curY - halfSq + 8, sqSize - 16, sqSize - 16);
+
+      // E. Crisp high-contrast white border
+      actx.strokeStyle = '#ffffff';
+      actx.lineWidth = 1.5;
+      actx.globalAlpha = 1.0;
+      actx.strokeRect(curX - halfSq, curY - halfSq, sqSize, sqSize);
+      actx.restore();
 
       requestAnimationFrame(renderArcadeGrid);
     }
