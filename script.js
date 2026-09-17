@@ -677,16 +677,35 @@ document.addEventListener('DOMContentLoaded', () => {
     let pdpr = window.devicePixelRatio || 1;
     let blockSize = 120;
     let cols = 0;
-    let rows = 0;
+    let fringeMap = [];
     let boundaryMouseX = -1000;
     let boundaryMouseY = -1000;
 
     let targetProgress = 0;
     let currentProgress = 0;
 
-    function getBlockNoise(c, r) {
-      const n = Math.sin(c * 12.9898 + r * 78.233) * 43758.5453;
-      return n - Math.floor(n);
+    // Helper functions for smooth block color resolution into bottom screen cream (#faf6ee)
+    function hexToRgb(hex) {
+      const clean = hex.replace('#', '');
+      if (clean.length === 3) {
+        const r = parseInt(clean[0] + clean[0], 16);
+        const g = parseInt(clean[1] + clean[1], 16);
+        const b = parseInt(clean[2] + clean[2], 16);
+        return [r, g, b];
+      }
+      const num = parseInt(clean, 16);
+      return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+    }
+
+    function lerpColor(c1Hex, c2Hex, t) {
+      if (t <= 0) return c1Hex;
+      if (t >= 1) return c2Hex;
+      const [r1, g1, b1] = hexToRgb(c1Hex);
+      const [r2, g2, b2] = hexToRgb(c2Hex);
+      const r = Math.round(r1 + (r2 - r1) * t);
+      const g = Math.round(g1 + (g2 - g1) * t);
+      const b = Math.round(b1 + (b2 - b1) * t);
+      return 'rgb(' + r + ', ' + g + ', ' + b + ')';
     }
 
     // Smooth scroll progress mapped through track entrance and pinned scroll
@@ -697,10 +716,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const vh = window.innerHeight;
       const trackHeight = track.offsetHeight;
 
-      // Transition maps directly to the pinned scroll duration
-      // Pinned when rect.top goes from 0 down to -(trackHeight - vh)
-      // With 0.12*vh anticipation as hero finishes
-      const startY = vh * 0.12;
+      const startY = vh * 0.85;
       const endY = -(trackHeight - vh);
       const scrollRange = Math.max(1, startY - endY);
       const rawP = (startY - rect.top) / scrollRange;
@@ -734,7 +750,28 @@ document.addEventListener('DOMContentLoaded', () => {
       const targetCols = pw < 600 ? 5 : (pw < 1024 ? 8 : 10);
       blockSize = Math.ceil(pw / targetCols);
       cols = Math.ceil(pw / blockSize);
-      rows = Math.ceil(ph / blockSize);
+
+      // 4-6 blocks in depth for dramatic voxel landscape
+      const stepHeights = [5, 6, 4, 6, 5, 4, 6, 5, 6, 4];
+      const colorPalettes = [
+        ['#faf6ee', '#2563eb', '#4ade80', '#090c0a', '#4ade80', '#faf6ee', '#2563eb'],
+        ['#090c0a', '#090c0a', '#4ade80', '#2563eb', '#faf6ee', '#4ade80', '#090c0a'],
+        ['#2563eb', '#faf6ee', '#faf6ee', '#4ade80', '#090c0a', '#2563eb', '#faf6ee'],
+        ['#faf6ee', '#2563eb', '#090c0a', '#4ade80', '#4ade80', '#faf6ee', '#2563eb'],
+        ['#2563eb', '#4ade80', '#faf6ee', '#2563eb', '#090c0a', '#4ade80', '#faf6ee'],
+        ['#4ade80', '#faf6ee', '#faf6ee', '#faf6ee', '#2563eb', '#090c0a', '#4ade80'],
+        ['#2563eb', '#4ade80', '#faf6ee', '#090c0a', '#4ade80', '#2563eb', '#faf6ee'],
+        ['#faf6ee', '#090c0a', '#2563eb', '#4ade80', '#faf6ee', '#090c0a', '#4ade80'],
+        ['#090c0a', '#090c0a', '#2563eb', '#4ade80', '#faf6ee', '#4ade80', '#2563eb'],
+        ['#2563eb', '#4ade80', '#4ade80', '#faf6ee', '#090c0a', '#2563eb', '#faf6ee']
+      ];
+
+      fringeMap = [];
+      for (let c = 0; c < cols; c++) {
+        const heightInBlocks = stepHeights[c % stepHeights.length];
+        const colors = colorPalettes[c % colorPalettes.length];
+        fringeMap.push({ heightInBlocks, colors });
+      }
     }
 
     window.addEventListener('resize', resizePixelWave);
@@ -744,20 +781,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderPixelWave() {
       waveTime += 0.02;
 
-      // Responsive momentum lerp: identical, symmetrical behavior in both scroll directions
+      // Responsive momentum lerp
       const delta = (targetProgress - currentProgress) * 0.08;
       currentProgress += delta;
       if (Math.abs(targetProgress - currentProgress) < 0.0002) {
         currentProgress = targetProgress;
       }
 
-      // Fast-path solid renders at exact bounds
-      if (currentProgress <= 0.02) {
-        pctx.fillStyle = '#090c0a';
-        pctx.fillRect(0, 0, pw, ph);
-        requestAnimationFrame(renderPixelWave);
-        return;
-      }
+      // If transition is fully completed (scrolled to end of sticky track), render solid flat cream
       if (currentProgress >= 0.98) {
         pctx.fillStyle = '#faf6ee';
         pctx.fillRect(0, 0, pw, ph);
@@ -765,77 +796,81 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Canvas background matches dominant side
-      pctx.fillStyle = currentProgress < 0.5 ? '#090c0a' : '#faf6ee';
+      // 1. Fill entire canvas with dark hero black (#090c0a) to seamlessly match the hero
+      pctx.fillStyle = '#090c0a';
       pctx.fillRect(0, 0, pw, ph);
 
-      // Render full-screen grid of chunky voxel blocks
-      for (let r = 0; r < rows; r++) {
-        // rowFactor: bottom row (r = rows - 1) activates first (0.0), top row (r = 0) activates last (1.0)
-        const rowFactor = (rows - 1 - r) / Math.max(1, rows - 1);
-        const y = r * blockSize;
+      // Base Y of the solid cream deck:
+      // Starts just below bottom of canvas (ph + blockSize * 1.5), rises smoothly to ph * 0.38
+      const initialBaseY = ph + blockSize * 1.5;
+      const finalBaseY = ph * 0.38;
+      const currentDeckY = initialBaseY - (initialBaseY - finalBaseY) * currentProgress;
 
-        for (let c = 0; c < cols; c++) {
-          const x = c * blockSize;
+      // Calculate column deck heights and wave delays
+      const colDeckYs = [];
+      let maxDeckY = -10000;
+      for (let c = 0; c < cols; c++) {
+        const colDelay = Math.sin((c / cols) * Math.PI) * 0.15 + (c / cols) * 0.1;
+        const colProgress = Math.max(0, Math.min(1, (currentProgress - colDelay * 0.2) / 0.8));
+        const ripple = Math.sin(waveTime + c * 0.5) * 3;
+        const colDeckY = currentDeckY + ripple;
+        colDeckYs.push({ colDeckY, colProgress });
+        if (colDeckY > maxDeckY) maxDeckY = colDeckY;
+      }
 
-          // Signature Transform9 column wave + pseudo-random block jitter
-          const colWave = Math.sin((c / cols) * Math.PI) * 0.10 + Math.cos((c / cols) * Math.PI * 2) * 0.05;
-          const blockJitter = (getBlockNoise(c, r) - 0.5) * 0.16;
+      // 2. Draw solid cream deck base across full width
+      pctx.fillStyle = '#faf6ee';
+      if (maxDeckY < ph) {
+        pctx.fillRect(0, Math.max(0, maxDeckY - 1), pw, ph - Math.max(0, maxDeckY - 1) + 2);
+      }
 
-          // Activation center across progress 0.16 to 0.84
-          let activationPoint = 0.18 + 0.64 * (rowFactor * 0.82 + colWave + blockJitter);
-          activationPoint = Math.max(0.12, Math.min(0.88, activationPoint));
+      // Draw stepped column deck fills
+      for (let c = 0; c < cols; c++) {
+        const x = c * blockSize;
+        const { colDeckY } = colDeckYs[c];
+        if (colDeckY < maxDeckY && colDeckY < ph) {
+          pctx.fillRect(x - 1, colDeckY, blockSize + 2, maxDeckY - colDeckY + 2);
+        }
+      }
 
-          const windowSize = 0.20;
-          const localP = (currentProgress - (activationPoint - windowSize * 0.5)) / windowSize;
+      // 3. Draw chunky stepped fringe blocks rising ahead of the cream deck (BORDERLESS)
+      for (let c = 0; c < cols; c++) {
+        const x = c * blockSize;
+        const config = fringeMap[c] || { heightInBlocks: 5, colors: colorPalettes[0] };
+        const { colDeckY, colProgress } = colDeckYs[c];
 
-          const variant = (c * 3 + r * 7) % 5;
-          let blockColor;
+        // Staggered start per column for color resolving into cream
+        const colResolveStart = 0.25 + (((c * 7) % cols) / cols) * 0.35;
+        const colResolveDuration = 0.35;
 
-          if (localP <= 0) {
-            // Dark Hero state
-            blockColor = '#090c0a';
-          } else if (localP >= 1.0) {
-            // Offwhite State (matches editorial background)
-            blockColor = '#faf6ee';
-          } else {
-            // Active Transition: CRISP SOLID BRAND PALETTE (NO MUDDY LERPING!)
-            if (variant === 0) {
-              // Black -> Blue -> Lime -> Offwhite
-              if (localP < 0.35) blockColor = '#2563eb';
-              else if (localP < 0.70) blockColor = '#4ade80';
-              else blockColor = '#faf6ee';
-            } else if (variant === 1) {
-              // Black -> Lime -> Blue -> Offwhite
-              if (localP < 0.35) blockColor = '#4ade80';
-              else if (localP < 0.70) blockColor = '#2563eb';
-              else blockColor = '#faf6ee';
-            } else if (variant === 2) {
-              // Black -> Blue -> Offwhite
-              if (localP < 0.50) blockColor = '#2563eb';
-              else blockColor = '#faf6ee';
-            } else if (variant === 3) {
-              // Black -> Lime -> Offwhite
-              if (localP < 0.50) blockColor = '#4ade80';
-              else blockColor = '#faf6ee';
-            } else {
-              // Direct flip: Black -> Offwhite
-              blockColor = localP < 0.50 ? '#090c0a' : '#faf6ee';
-            }
-          }
+        const targetBlocksCount = config.heightInBlocks;
+        const currentBlocksCount = Math.floor(colProgress * (targetBlocksCount + 1));
 
-          // Interactive cursor hover: vivid lime highlight
+        for (let b = 0; b < currentBlocksCount; b++) {
+          const y = colDeckY - (b + 1) * blockSize;
+          if (y + blockSize < 0 || y >= ph) continue;
+
+          const blockDelay = (b / 7) * 0.08;
+          const blockResolveRatio = Math.max(0, Math.min(1, (currentProgress - (colResolveStart + blockDelay)) / colResolveDuration));
+
+          let origColor = config.colors[b % config.colors.length];
+
+          // Check if cursor is hovering over this block
           const isHovered = (
             boundaryMouseX >= x && boundaryMouseX < x + blockSize &&
             boundaryMouseY >= y && boundaryMouseY < y + blockSize
           );
-          if (isHovered) {
-            blockColor = '#4ade80';
+
+          if (isHovered && blockResolveRatio < 0.65) {
+            origColor = '#4ade80'; // Vivid lime hover reaction
           }
 
-          // Render block with slight 0.5px overlap to eliminate subpixel artifacts
+          // Smoothly interpolate block color into cream (#faf6ee)
+          const blockColor = blockResolveRatio > 0 ? lerpColor(origColor, '#faf6ee', blockResolveRatio) : origColor;
+
           pctx.fillStyle = blockColor;
-          pctx.fillRect(x, y, blockSize + 0.5, blockSize + 0.5);
+          // Overlap slightly by 0.5px to eliminate any subpixel gaps between blocks
+          pctx.fillRect(x - 0.5, y - 0.5, blockSize + 1, blockSize + 1);
         }
       }
 
