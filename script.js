@@ -683,16 +683,40 @@ document.addEventListener('DOMContentLoaded', () => {
     let targetProgress = 0;
     let currentProgress = 0;
 
+    // Helper functions for smooth block color resolution into bottom screen cream (#faf6ee)
+    function hexToRgb(hex) {
+      const clean = hex.replace('#', '');
+      if (clean.length === 3) {
+        const r = parseInt(clean[0] + clean[0], 16);
+        const g = parseInt(clean[1] + clean[1], 16);
+        const b = parseInt(clean[2] + clean[2], 16);
+        return [r, g, b];
+      }
+      const num = parseInt(clean, 16);
+      return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+    }
+
+    function lerpColor(c1Hex, c2Hex, t) {
+      if (t <= 0) return c1Hex;
+      if (t >= 1) return c2Hex;
+      const [r1, g1, b1] = hexToRgb(c1Hex);
+      const [r2, g2, b2] = hexToRgb(c2Hex);
+      const r = Math.round(r1 + (r2 - r1) * t);
+      const g = Math.round(g1 + (g2 - g1) * t);
+      const b = Math.round(b1 + (b2 - b1) * t);
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
     // Both Scroll Down AND Scroll Up are calculated dynamically from viewport position
     function updateTransitionProgress() {
       if (!pixelBoundary) return;
       const rect = pixelBoundary.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      // Extended scroll runway so the transition plays out for slightly longer
+      // Extended scroll runway so the transition plays out for ~1s longer & feels pronounced
       // Starts as boundary enters lower viewport, completes smoothly as user scrolls into workshop
-      const startY = vh * 1.05;
-      const endY = -rect.height * 0.25;
+      const startY = vh * 1.15;
+      const endY = -rect.height * 0.45;
       const rawP = (startY - rect.top) / (startY - endY);
       targetProgress = Math.max(0, Math.min(1, rawP));
     }
@@ -761,50 +785,81 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderPixelWave() {
       waveTime += 0.02;
 
-      // Smooth liquid organic lerp for scroll up and down: 0.09 for luxurious fluid travel
-      const delta = (targetProgress - currentProgress) * 0.09;
+      // Smooth liquid organic lerp for scroll up and down:
+      // Delta of 0.052 gives an extra ~1 second of smooth fluid momentum/travel
+      const delta = (targetProgress - currentProgress) * 0.052;
       currentProgress += delta;
-      if (Math.abs(targetProgress - currentProgress) < 0.0003) {
+      if (Math.abs(targetProgress - currentProgress) < 0.0002) {
         currentProgress = targetProgress;
+      }
+
+      // If transition is fully completed (scrolled into workshop), render 100% solid flat cream
+      // Completely eliminates ANY leftover colored blocks, vertical lines, or seams!
+      if (currentProgress >= 0.995) {
+        pctx.fillStyle = '#faf6ee';
+        pctx.fillRect(0, 0, pw, ph);
+        requestAnimationFrame(renderPixelWave);
+        return;
       }
 
       // 1. Fill entire canvas with dark hero black (#090c0a) to seamlessly continue the hero
       pctx.fillStyle = '#090c0a';
       pctx.fillRect(0, 0, pw, ph);
 
-      // Base Y of the solid cream deck: rises when scrolling DOWN, retreats when scrolling UP
-      // Scaled for height: 640px to give stepped fringe ample vertical room
-      const targetBaseY = ph - blockSize * 2.2;
-      const hiddenBaseY = ph + blockSize * 2.4;
+      // Base Y of the solid cream deck:
+      // Climbs from below canvas (hiddenBaseY) completely up through top (targetBaseY)
+      const targetBaseY = -blockSize * 2.8;
+      const hiddenBaseY = ph + blockSize * 2.5;
       const currentDeckY = hiddenBaseY - (hiddenBaseY - targetBaseY) * currentProgress;
 
+      // Resolution factor (0.0 to 1.0) during final 35% of transition:
+      // Morphs blue/green/black blocks into the bottom screen cream (#faf6ee)
+      const resolveRatio = Math.max(0, Math.min(1, (currentProgress - 0.65) / 0.30));
+
+      // Calculate column deck heights and wave delays
+      const colDeckYs = [];
+      let maxDeckY = -10000;
+      for (let c = 0; c < cols; c++) {
+        const colDelay = Math.sin((c / cols) * Math.PI) * 0.22 + (c / cols) * 0.14;
+        const colProgress = Math.max(0, Math.min(1, (currentProgress - colDelay * 0.30) / 0.70));
+        const ripple = Math.sin(waveTime + c * 0.6) * 3;
+        const colDeckY = currentDeckY + ripple;
+        colDeckYs.push({ colDeckY, colProgress });
+        if (colDeckY > maxDeckY) maxDeckY = colDeckY;
+      }
+
+      // 2. Draw unified solid cream deck base:
+      // Single continuous rect across the whole width eliminates all vertical hairline seams
+      pctx.fillStyle = '#faf6ee';
+      if (maxDeckY < ph) {
+        pctx.fillRect(0, Math.max(0, maxDeckY - 1), pw, ph - Math.max(0, maxDeckY - 1) + 2);
+      }
+
+      // Draw stepped column deck fills above maxDeckY with generous 2px edge overlap
+      for (let c = 0; c < cols; c++) {
+        const x = c * blockSize;
+        const { colDeckY } = colDeckYs[c];
+        if (colDeckY < maxDeckY && colDeckY < ph) {
+          pctx.fillRect(x - 1, colDeckY, blockSize + 2, maxDeckY - colDeckY + 2);
+        }
+      }
+
+      // 3. Draw stepped fringe blocks:
+      // Playful blue/green/black/cream pattern during 0-75% unveiling,
+      // then smoothly morphs into pure bottom cream (#faf6ee) during final 25%
       for (let c = 0; c < cols; c++) {
         const x = c * blockSize;
         const config = fringeMap[c] || { heightInBlocks: 2, colors: ['#faf6ee', '#4ade80'] };
+        const { colDeckY, colProgress } = colDeckYs[c];
 
-        // Column wave delay creates the sweeping cascading arc
-        const colDelay = Math.sin((c / cols) * Math.PI) * 0.22 + (c / cols) * 0.14;
-        const colProgress = Math.max(0, Math.min(1, (currentProgress - colDelay * 0.30) / 0.70));
-
-        // Subtle organic ripple along the fringe
-        const ripple = Math.sin(waveTime + c * 0.6) * 3;
-        const colDeckY = currentDeckY + ripple;
-
-        // 2. Draw solid cream deck at the bottom connecting directly into #workshop
-        if (colDeckY < ph) {
-          pctx.fillStyle = '#faf6ee';
-          pctx.fillRect(x, colDeckY, blockSize + 0.5, ph - colDeckY + 4);
-        }
-
-        // 3. Draw stepped fringe blocks: rise when scrolling down, dissolve down when scrolling up
         const targetBlocksCount = config.heightInBlocks;
         const currentBlocksCount = Math.floor(colProgress * (targetBlocksCount + 1));
 
         for (let b = 0; b < currentBlocksCount; b++) {
           const y = colDeckY - (b + 1) * blockSize;
-          if (y + blockSize < 0) continue;
+          if (y + blockSize < 0 || y >= ph) continue;
 
-          let color = config.colors[b % config.colors.length];
+          let origColor = config.colors[b % config.colors.length];
 
           // Check if cursor is hovering over this block
           const isHovered = (
@@ -812,21 +867,24 @@ document.addEventListener('DOMContentLoaded', () => {
             boundaryMouseY >= y && boundaryMouseY < y + blockSize
           );
 
-          if (isHovered) {
-            color = '#4ade80'; // Vivid lime hover reaction
+          if (isHovered && resolveRatio < 0.7) {
+            origColor = '#4ade80'; // Vivid lime hover reaction
           }
 
-          pctx.fillStyle = color;
-          pctx.fillRect(x, y, blockSize + 0.5, blockSize + 0.5);
+          // Smoothly interpolate block color into the bottom screen cream (#faf6ee)
+          const blockColor = resolveRatio > 0 ? lerpColor(origColor, '#faf6ee', resolveRatio) : origColor;
 
-          // Crisp 1px outline matching Transform9 pixel boundaries
-          if (color === '#090c0a') {
-            pctx.strokeStyle = 'rgba(255, 255, 255, 0.09)';
-          } else {
-            pctx.strokeStyle = 'rgba(15, 23, 42, 0.16)';
+          pctx.fillStyle = blockColor;
+          // Slight 0.5px overlap eliminates any subpixel gaps between blocks
+          pctx.fillRect(x - 0.5, y - 0.5, blockSize + 1, blockSize + 1);
+
+          // 1px block outline: smoothly fades to 0 opacity as blocks resolve into cream
+          const borderAlpha = (1 - resolveRatio) * (origColor === '#090c0a' ? 0.09 : 0.16);
+          if (borderAlpha > 0.01) {
+            pctx.strokeStyle = origColor === '#090c0a' ? `rgba(255, 255, 255, ${borderAlpha})` : `rgba(15, 23, 42, ${borderAlpha})`;
+            pctx.lineWidth = 1;
+            pctx.strokeRect(x, y, blockSize, blockSize);
           }
-          pctx.lineWidth = 1;
-          pctx.strokeRect(x, y, blockSize, blockSize);
         }
       }
 
